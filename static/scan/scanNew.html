@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>scan</title>
+  <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="Resources/dynamsoft.webtwain.initiate.js"></script>
+  <script src="Resources/dynamsoft.webtwain.config.js"></script>
+  <script src="Resources/dynamsoft.webtwain.install.js"></script>
+</head>
+<body>
+<input type="button" value="Scan" onclick="OnScanButtonClick();"/>
+<input type="button" value="Stop" onclick="Twain_StopAll();"/>
+<div id="dwtcontrolContainer" style="display:none;"></div>
+<div class="div-fields-item"></div>
+<script type="text/javascript">
+
+
+
+  var bSelected = false;
+  function AcquireImage() {
+    OnScanButtonClick();
+  }
+
+  var isDEBUG = false;
+
+  if (isDEBUG) {
+    //sessionStorage.setItem("examID","303");
+    //sessionStorage.setItem("userToken","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IjE2N2U5M2JjM2Y4ZTExMDUyMzZjYjI1YTdhZDg1NDc4NmQ0ZDg0YzNjZGMwOWNhMTJhNzlmNGY1YmVhZjRiZGIiLCJyb2xlIjoiYWRtaW4iLCJJRCI6MiwiZXhwIjoxNTUwNTg2MDYwLCJ1c2VybmFtZSI6ImFkbWluIn0.0LRcpJYZ6vH7G402HroVLZc2UnhZ-5FTkWbvBZ17qyg");
+  }
+
+  function _bzlog(s) {
+    if (isDEBUG)
+    {
+      let d = new Date();
+      let datestring = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) +
+        " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2)
+        + "," + ("0" + d.getMilliseconds()).slice(-3) + ",";
+      console.log(datestring + s);
+    }
+  }
+
+  var examID;
+  var serverFileID;
+  var signedUrls;
+
+  var DWObject;
+  var Twain_isStopping = false;
+  var Twain_isScanning = false;
+  var Twain_isHttpPosting = 0;
+  var Twain_timerInterval = 100;
+  var Twain_batchCounter = 0;
+  var Twain_scanCounter = 0;
+  var Twain_uploadCounter = 0;
+  var Twain_imgBlobQueue = [];
+
+  function Twain_stateChangeEvent(e)
+  {
+    if (e=="upload finished") {
+      sessionStorage.setItem("isScanDone", 1);
+    } else if (e=="started") {
+      sessionStorage.setItem("isScanDone", 0);
+    }
+    //if (isDEBUG) alert(e);
+  }
+
+  function OnScanButtonClick() {
+    examID = sessionStorage.getItem("examID");
+    Twain_StartScan();
+  }
+
+  Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', Twain_OnReady);
+
+  function Twain_OnReady() {
+    DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+    if (DWObject) {
+      DWObject.IfUseTwainDSM = true;
+      DWObject.Width = 0;
+      DWObject.Height = 0;
+      DWObject.RegisterEvent("OnPostTransfer", Twain_OnPostTransfer);
+      DWObject.RegisterEvent("OnPostAllTransfers", Twain_OnPostAllTransfers);
+      setTimeout(Twain_UploadProcessor,Twain_timerInterval);
+      _bzlog('scanNew v4.0 started');
+    }
+  }
+
+  function Twain_OnPostTransfer() {
+    Twain_batchCounter++;
+    Twain_scanCounter++;
+    _bzlog("q1");
+    DWObject.SelectedImagesCount = 1;
+    DWObject.SetSelectedImageIndex(0, 0);
+    DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_JPG);
+    let imgStr = DWObject.SaveSelectedImagesToBase64Binary();
+    let blobBin = Twain_dataURLtoBlob('data:image/jpg;base64,' + imgStr);
+    Twain_imgBlobQueue.push(blobBin);
+    DWObject.RemoveImage(0);
+    _bzlog("q2");
+    _bzlog('Twain_OnPostTransfer:'+DWObject.HowManyImagesInBuffer+','+Twain_imgBlobQueue.length+','+Twain_batchCounter+','+Twain_scanCounter);
+  }
+
+  function Twain_OnPostAllTransfers() {
+    _bzlog('Twain_OnPostAllTransfers');
+    if (Twain_batchCounter % 2 !== 0) {
+      alert("Error 1");
+    }
+  }
+
+
+  function Twain_StartScan() {
+    if (Twain_isScanning == true) return;
+    if (Twain_isStopping == true) return;
+
+    if (DWObject && DWObject.SelectSource()) {
+      _bzlog('Twain_StartScan');
+      bSelected = true;
+      Twain_isScanning = true;
+      Twain_batchCounter = 0;
+      Twain_imgBlobQueue = [];
+      DWObject.OpenSource();
+      //DWObject.IfShowUI = true;
+      DWObject.IfShowUI = false;
+      DWObject.IfFeederEnabled = true;
+      DWObject.IfDuplexEnabled = true;
+      DWObject.PixelType = EnumDWT_PixelType.TWPT_GRAY;
+      DWObject.Resolution = 200;
+      DWObject.IfDisableSourceAfterAcquire = true;
+      DWObject.IfShowFileDialog = false;
+      DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
+      DWObject.BufferMemoryLimit = 100;
+      //DWObject.TransferMode = EnumDWT_TransferMode.TWSX_NATIVE;
+      DWObject.TransferMode = EnumDWT_TransferMode.TWSX_MEMORY;
+      DWObject.IfAllowLocalCache = true;
+      DWObject.AcquireImage(Twain_OnAcquireSuccess, Twain_OnAcquireFailure);
+      Twain_stateChangeEvent("started");
+    } else {
+      _bzlog("SelectSource failed!");
+    }
+  }
+
+  function Twain_StopAll() {
+    _bzlog("Twain_StopAll");
+    Twain_isStopping = true;
+    if (DWObject) {
+      DWObject.CloseSource();
+      DWObject.RemoveAllImages();
+      Twain_imgBlobQueue = [];
+    }
+    Twain_isScanning = false;
+    bSelected = false;
+  }
+
+  function Twain_isShuttingDown() {
+    if (Twain_isStopping == true) {
+      _bzlog('Twain_isShuttingDown,true');
+      Twain_isHttpPosting = 0;
+      return true;
+    }
+    return false;
+  }
+
+  function Twain_OnAcquireSuccess() {
+    _bzlog('Twain_OnAcquireSuccess');
+    DWObject.CloseSource();
+    Twain_isScanning = false;
+    bSelected = false;
+  }
+
+  function Twain_OnAcquireFailure(errorCode, errorString) {
+    _bzlog('Twain_OnAcquireFailure');
+    DWObject.CloseSource();
+    Twain_isScanning = false;
+    bSelected = false;
+  }
+
+  function Twain_getSignedUrl(testID) {
+    if (Twain_isShuttingDown() == true) return;
+    $.ajax({
+      async: true,
+      type: 'post',
+      timeout: 10000,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"));
+      },
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      url: 'http://app.jouletek.com:8080/panguanb/scan/start',
+      data: {testID: testID},
+      success: function (responseData) {
+        _bzlog("getSignedUrl success,"+Twain_uploadCounter);
+        if (Twain_isShuttingDown() == true) return;
+        serverFileID = responseData.data.serverFileID;
+        _bzlog("serverFileID="+serverFileID);
+        signedUrls = responseData.data.urls;
+        Twain_isHttpPosting++;
+      },
+      error: function (responseData) {
+        _bzlog("getSignedUrl failed,"+Twain_uploadCounter);
+        if (Twain_isShuttingDown() == true) return;
+        Twain_isHttpPosting--;
+      }
+    })
+  }
+
+  function Twain_confirmUpload() {
+    if (Twain_isShuttingDown() == true) return;
+    $.ajax({
+      async: true,
+      timeout: 10000,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"))
+      },
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      data: {testID: examID, id: serverFileID.split("_").pop(), serverFileID: serverFileID},
+      type: 'post',
+      url: 'http://app.jouletek.com:8080/panguanb/upload/confirm/once',
+      success: function (responseData) {
+        _bzlog("confirm success,"+Twain_uploadCounter+","+serverFileID)
+        if (Twain_isShuttingDown() == true) return;
+        Twain_isHttpPosting=0;
+        if (Twain_isScanning==false && Twain_imgBlobQueue.length==0) Twain_stateChangeEvent("upload finished");
+      },
+      error: function (responseData) {
+        _bzlog("confirm failed,"+Twain_uploadCounter+","+serverFileID)
+        if (Twain_isShuttingDown() == true) return;
+        Twain_isHttpPosting--;
+      }
+    })
+  }
+
+  function Twain_uploadToOSS(url) {
+    if (Twain_isShuttingDown() == true) return;
+    let blobBin = Twain_imgBlobQueue[0];
+    $.ajax({
+      async: true,
+      timeout: 20000,
+      headers: {
+        'x-oss-meta-author': 'aliy'
+      },
+      type: "put",
+      url: url,
+      data: blobBin,
+      processData: false,
+      contentType: 'multipart/form-data',
+      success: function (responseData) {
+        _bzlog("upload success,"+Twain_uploadCounter+","+serverFileID);
+        if (Twain_isShuttingDown() == true) return;
+        Twain_imgBlobQueue.shift();
+        Twain_isHttpPosting++;
+      },
+      error: function (responseData) {
+        _bzlog("upload failed,"+Twain_uploadCounter+","+serverFileID);
+        if (Twain_isShuttingDown() == true) return;
+        Twain_isHttpPosting--;
+      }
+    })
+  }
+
+  function Twain_dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(',');
+    var mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
+    // _bzlog("arr[0]====" + JSON.stringify(arr[0]));//   "data:image/png;base64"
+    // _bzlog("arr[0].match(/:(.*?);/)====" + arr[0].match(/:(.*?);/));// :image/png;,image/png
+    // _bzlog("arr[0].match(/:(.*?);/)[1]====" + arr[0].match(/:(.*?);/)[1]);//   image/png
+    var bstr = atob(arr[1].replace(/\s/g, ''));
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr]);//值，类型
+  }
+
+  function Twain_UploadProcessor()
+  {
+    switch (Twain_isHttpPosting) {
+      case 0:
+        if (Twain_isStopping == true) {
+          Twain_isStopping = false;
+          Twain_stateChangeEvent("stopped");
+        } else {
+          if (Twain_imgBlobQueue.length >= 2) {
+            Twain_isHttpPosting = 1;
+            Twain_uploadCounter++;
+            Twain_getSignedUrl(examID);
+          }
+        }
+        break;
+      case 2:
+        Twain_isHttpPosting = 3;
+        Twain_uploadToOSS(signedUrls[0]);
+        break;
+      case 4:
+        Twain_isHttpPosting = 5;
+        Twain_uploadToOSS(signedUrls[1]);
+        break;
+      case 6:
+        Twain_isHttpPosting = 7;
+        Twain_confirmUpload();
+        break;
+    }
+    setTimeout(Twain_UploadProcessor,Twain_timerInterval);
+  }
+
+</script>
+</body>
+</html>

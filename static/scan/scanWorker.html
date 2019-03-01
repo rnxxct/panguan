@@ -1,0 +1,299 @@
+<html>
+<head>
+  <title>scan</title>
+  <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="../../static/scan/Resources/dynamsoft.webtwain.initiate.js"></script>
+  <script src="../../static/scan/Resources/dynamsoft.webtwain.config.js"></script>
+  <script src="../../static/scan/Resources/dynamsoft.webtwain.install.js"></script>
+</head>
+<body>
+<input type="button" value="Scan" onclick="AcquireImage();"/>
+<div id="dwtcontrolContainer" style="display:none;"></div>
+<div class="div-fields-item"></div>
+<script type="text/javascript">
+  var examID;
+  var DWObject;
+  var currentIndex = 1;
+  /*正反面标志*/
+  var currentIndexOfImage = 0;
+  /*当前缓冲区中最后一张图片的index*/
+  var currentUrlIndex = -1;
+  /*当前获取到图片url的index*/
+  var lastRequestUrlIndex = -99999;
+  var currentUrls = [];
+  /*获取的图片url的存储*/
+  var currentUploadIndex = -1;
+  /*当前上传完图片的index*/
+  var currentConfirmIndex = -1;
+  /*当前确认完的图片的index*/
+  var currentTestID;
+  var bSelected = false
+  Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', Dynamsoft_OnReady);
+  function Dynamsoft_OnReady() {
+    DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+    if (DWObject) {
+      DWObject.IfUseTwainDSM = true
+      DWObject.Width = 0;
+      DWObject.Height = 0;
+    }
+    DWObject.RegisterEvent("OnPostTransfer", function () {
+      if (DWObject.HowManyImagesInBuffer == 0) {
+        return;
+      }
+      currentIndexOfImage++;
+      /*每张图片缓冲完，图片的下标加一*/
+    })
+/*
+    DWObject.RegisterEvent("OnPostAllTransfers", function () {
+      if (DWObject.HowManyImagesInBuffer % 2 !== 0) {
+        alert("您的扫描出错,请你重新扫描这部分试卷！")
+        DWObject.RemoveAllImages()
+        currentIndexOfImage = -1
+        currentIndex = 1
+        currentURLS = []
+        uploadImageAndUrl = []
+        uploadImages = []
+        return
+      }
+      var timer2 = setInterval(function () {
+        if (uploadImages.length == DWObject.HowManyImagesInBuffer) {
+          clearInterval(timer2)
+          DWObject.RemoveAllImages()
+          currentIndexOfImage = -1
+          currentIndex = 1
+          currentURLS = []
+          uploadImageAndUrl = []
+          uploadImages = []
+        }
+      }, 1000)
+    })
+*/
+  }
+  var confirmWorker = new Worker("Scripts/confirm.js")
+  var uploadOssWorker = new Worker("Scripts/uploadOss.js")
+  var requestUrlWorker = new Worker("Scripts/requestUrl.js")
+  requestUrlWorker.onmessage = function (event) {
+    console.log(event)
+    if (currentIndexOfImage == -1 || DWObject.HowManyImagesInBuffer == 0) {
+      return
+    }
+    if (event.data.currentURLS!=null && event.data.currentURLS!==undefined){
+      currentUrls.push(event.data.currentURLS)
+      return
+    }
+    if (event.data.currentIndex == lastRequestUrlIndex) {
+      return
+    }
+    if (event.data.currentIndex < currentIndexOfImage-1) {
+      requestUrlWorker.postMessage({testID: examID,userToken:sessionStorage.getItem("userToken")})
+      lastRequestUrlIndex = event.data.currentIndex
+    }
+  }
+  uploadOssWorker.onmessage = function () {
+
+  }
+  confirmWorker.onmessage = function () {
+
+  }
+  function AcquireImage() {
+    console.log("acqure image")
+    sessionStorage.setItem("isScanDone", 0)//设置扫描开始标志,还没求扫描成功
+    examID = sessionStorage.getItem("examID");
+    if (DWObject) {
+      bSelected = DWObject.SelectSource()
+      if (bSelected) {
+        bSelected = true
+        DWObject.OpenSource();
+        DWObject.IfShowUI = false;// 隐藏默认UI
+        DWObject.IfFeederEnabled = true;// 使用自动进纸
+        DWObject.IfDuplexEnabled = true;//双 true
+        DWObject.PixelType = EnumDWT_PixelType.TWPT_GRAY; // 扫描灰度图
+        DWObject.Resolution = 200; // 使用200DPI扫描
+        DWObject.IfDisableSourceAfterAcquire = true
+        DWObject.IfShowFileDialog = false
+        DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_A4//设置扫描的纸张 2018年11月29日10:09:08
+        /*
+         DWObject.BufferMemoryLimit = 30
+         */
+        DWObject.TransferMode = EnumDWT_TransferMode.TWSX_MEMORY
+        DWObject.IfAllowLocalCache = true
+        DWObject.AcquireImage(OnSuccess, OnFailure);
+      } else {
+        console.log("SelectSource failed!");
+        return
+      }
+    }
+    function OnSuccess() {
+      console.log('successful1');
+      sessionStorage.setItem("isScanDone", 1)
+      bSelected = false
+      DWObject.CloseSource()
+    }
+
+    function OnFailure(errorCode, errorString) {
+      DWObject.CloseSource()
+    }
+  }
+  function uploadToOss() {
+    let tempUrl1;
+    /*局部变量保存当前的第二张图片的地址*/
+    currentIndexOfImage++;
+    let currentIndexTemp;
+    /*保存当前是第正反面*/
+    let isConnectServer = false;
+    let selectedImageIndex = currentIndexOfImage
+    DWObject.SelectedImagesCount = 1;
+    DWObject.SetSelectedImageIndex(0, selectedImageIndex);
+    DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_JPG);
+    var strImg = DWObject.SaveSelectedImagesToBase64Binary();
+    var blobBin = dataURLtoBlob('data:image/jpg;base64,' + strImg)
+    if (currentIndex == 1) {
+      currentIndexTemp = 1
+      currentIndex = 0
+      try {
+        console.log("进入0判断---1")
+        do {
+          $.ajax({
+            async: false,
+            type: 'post',
+            timeout: 5000,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"))
+            },
+            header: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            url: 'http://app.jouletek.com:8080/panguanb/scan/start',
+            data: {testID: examID},
+            success: function (data) {
+              isConnectServer = true
+              currentTestID = data.data.testID
+              currentServerFileID = data.data.serverFileID
+              currentURLS = data.data.urls
+              $.ajax({
+                async: true,
+                headers: {
+                  'x-oss-meta-author': 'aliy'
+                },
+                type: "put",
+                url: currentURLS[0],
+                data: blobBin,
+                processData: false,
+                contentType: 'multipart/form-data',
+                success: function (data) {
+                  let tempUrl = currentURLS[0].split("?")
+                  let tempArray = tempUrl[0].split("/")
+                  let tempServerFileID = tempArray[tempArray.length - 2]
+                  let tempArray2 = tempServerFileID.split("_")
+                  let tempID = tempArray2[tempArray2.length - 1]
+                  $.ajax({
+                    async: true,
+                    beforeSend: function (xhr) {
+                      xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"))
+                    },
+                    header: {
+                      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    data: {
+                      testID: currentTestID,
+                      id: tempID,
+                      serverFileID: tempServerFileID,
+                      serialNumber: currentIndexTemp
+                    },
+                    type: 'post',
+                    url: 'http://app.jouletek.com:8080/panguanb/upload/confirm',
+                    success: function (data) {
+                      uploadImages.push(selectedImageIndex)
+                      console.log("confirm成功")
+                    },
+                    error: function (data) {
+                      console.log("没有confirm成功")
+                    }
+                  })
+                },
+                error: function (result) {
+                  console.log("test")
+                }
+              })
+            },
+            error: function () {
+
+            }
+          })
+        } while (!isConnectServer)
+      }
+      catch (e) {
+      }
+    }
+    else if (currentIndex == 0) {
+      if (currentURLS.length == 0 || currentURLS[1] == '') {
+        return
+      }
+      tempUrl1 = currentURLS[1]
+      console.log("进入1上传---上传之前")
+      currentIndexTemp = 0
+      currentIndex = 1
+      $.ajax({
+        async: true, /*第二张图片是否为异步上传*/
+        headers: {
+          'x-oss-meta-author': 'aliy'
+        },
+        type: "put",
+        url: tempUrl1,
+        data: blobBin,
+        processData: false,
+        contentType: 'multipart/form-data',
+        success: function (data) {
+          /*将当前上传成功的图片index保存下来*/
+          let tempUrl = tempUrl1.split("?")
+          let tempArray = tempUrl[0].split("/")
+          let tempServerFileID = tempArray[tempArray.length - 2]
+          let tempArray2 = tempServerFileID.split("_")
+          let tempID = tempArray2[tempArray2.length - 1]
+          let isConfirm = false;
+          $.ajax({
+            async: true,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"))
+            },
+            header: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            data: {testID: currentTestID, id: tempID, serverFileID: tempServerFileID, serialNumber: currentIndexTemp},
+            type: 'post',
+            url: 'http://app.jouletek.com:8080/panguanb/upload/confirm',
+            success: function (data) {
+              uploadImages.push(selectedImageIndex)
+              isConfirm = true
+              console.log("confirm成功")
+            },
+            error: function (data) {
+              isConfirm = false
+              console.log("没有confirm成功")
+            }
+          })
+        },
+        error: function (result) {
+
+        }
+      })
+    }
+  }
+  function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(',');
+    var mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
+    console.log("arr[0]====" + JSON.stringify(arr[0]));//   "data:image/png;base64"
+    console.log("arr[0].match(/:(.*?);/)====" + arr[0].match(/:(.*?);/));// :image/png;,image/png
+    console.log("arr[0].match(/:(.*?);/)[1]====" + arr[0].match(/:(.*?);/)[1]);//   image/png
+    var bstr = atob(arr[1].replace(/\s/g, ''));
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr]);//值，类型
+  }
+</script>
+</body>
+</html>

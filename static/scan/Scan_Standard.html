@@ -1,0 +1,307 @@
+<html>
+<head>
+  <title>Hello World</title>
+  <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
+  <script src="/panguan/static/scan/Resources/dynamsoft.webtwain.initiate.js"></script>
+  <script src="/panguan/static/scan/Resources/dynamsoft.webtwain.config.js"></script>
+  <script src="/panguan/static/scan/Resources/dynamsoft.webtwain.install.js"></script>
+</head>
+<body>
+<input type="button" style="display: none" value="Scan" onclick="AcquireImage();"/>
+<div id="dwtcontrolContainer"></div>
+<div class="div-fields-item"></div>
+<script type="text/javascript">
+  var templateID;
+  var currentIndex = 1;
+  var currentTestID;
+  var currentID;
+  var currentServerFileID;
+  var bSelected=false;
+  const client = new OSS.Wrapper({
+    region: "oss-cn-zhangjiakou.aliyuncs.com",
+    endpoint: 'oss-cn-zhangjiakou.aliyuncs.com',
+    accessKeyId: "LTAIBQQtw9GvFpht",
+    accessKeySecret: "bUyrKLwBWsLv3SkUYMj4OcNoC3WtZq",
+    bucket: "panguan-standard"
+  })
+  function string2buffer(str) {
+    // 首先将字符串转为16进制
+    let val = ""
+    for (let i = 0; i < str.length; i++) {
+      if (val === '') {
+        val = str.charCodeAt(i).toString(16)
+      } else {
+        val += ',' + str.charCodeAt(i).toString(16)
+      }
+    }
+    // 将16进制转化为ArrayBuffer
+    return new Uint8Array(val.match(/[\da-f]{2}/gi).map(function (h) {
+      return parseInt(h, 16)
+    })).buffer
+  }
+  function upLoadToOss() {
+    DWObject.SelectedImagesCount = 1;
+    DWObject.SetSelectedImageIndex(0, DWObject.CurrentImageIndexInBuffer);
+    DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_JPG);
+    var strImg, _uint8_STR;
+    strImg = DWObject.SaveSelectedImagesToBase64Binary();
+    //console.log(strImg)
+    // convert base64 to Uint8Array
+    var bytes = (strImg.length / 4) * 3;
+    var _temp = new ArrayBuffer(bytes);
+    _uint8_STR = Base64Binary.decode(strImg, _temp);
+    //console.log(_temp)
+    //console.log(_uint8_STR)
+    let ajaxRequest = new XMLHttpRequest();
+    let testID, serverFileID, id;
+    if (currentIndex == 1) {
+      try {
+        console.log("进入0判断---1")
+        ajaxRequest.open('POST', "http://app.jouletek.com:8080/panguanb/scan/standard/start", false);
+        ajaxRequest.setRequestHeader('Authorization', sessionStorage.getItem("userToken"));
+        ajaxRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        ajaxRequest.onreadystatechange = function () {
+          if (ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
+            console.log("进入0判断---响应之后")
+            let res = JSON.parse(ajaxRequest.responseText)
+            currentTestID = res.data.testID
+            currentServerFileID = res.data.serverFileID
+            currentID = res.data.id
+            console.log("************8" + ajaxRequest.responseText)
+            currentIndex = 0
+            client.put("/pdt8/workspace/" + currentServerFileID + "/" + currentServerFileID + "_" + currentIndex + ".jpg", new OSS.Buffer(_temp)).then(function (response) {
+              console.log("进入0上传---响应之后")
+              console.log("---------" + response)
+            });
+            console.log('Upload image to azure server successfully.');
+          }
+        };
+        ajaxRequest.send("templateID=" + templateID);
+        console.log("进入0判断---请求之后")
+      } catch (e) {
+
+      }
+    } else if (currentIndex == 0) {
+      console.log("进入1上传---上传之前")
+      currentIndex = 1
+      client.put("/pdt8/workspace/" + currentServerFileID + "/" + currentServerFileID + "_" + currentIndex + ".jpg", new OSS.Buffer(_temp)).then(function (response) {
+        console.log("---------" + JSON.stringify(response))
+        console.log("进入1上传---上传之后")
+        let tempArray = response.name.split("/")
+        let tempServerFileID = tempArray[tempArray.length - 2]
+        let tempArray2 = tempServerFileID.split("_")
+        let tempID = tempArray2[tempArray2.length - 1]
+        console.log(JSON.stringify("--------tempArray" + tempArray))
+        console.log(JSON.stringify("--------serverFileID" + tempServerFileID))
+        console.log(JSON.stringify("--------tempID" + tempID))
+        ajaxRequest.open('POST', "http://app.jouletek.com:8080/panguanb/upload/standard/confirm", false)
+        //var buffer = new OSS.Buffer(_uint8_STR)
+        ajaxRequest.setRequestHeader('Authorization', sessionStorage.getItem("userToken"));
+        ajaxRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        ajaxRequest.send("templateID=" + templateID + "&sheetID=" + tempID + "&serverFileID=" + tempServerFileID);
+        sessionStorage.setItem("standardSheetID", tempID)
+        console.log("confirm---之后")
+      });
+    }
+  }
+</script>
+<script type="text/javascript">
+
+  var DWObject;
+  Dynamsoft.WebTwainEnv.AutoLoad = false;
+  Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', Dynamsoft_OnReady); // Register OnWebTwainReady event. This event fires as soon as Dynamic Web TWAIN is initialized and ready to be used
+  function Dynamsoft_OnReady() {
+    blankField = document.getElementsByClassName('div-fields-item')[0].cloneNode(true);
+    DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+    //DWObject.ImageCaptureDriverType=EnumDWT_Driver.TWAIN
+    if (DWObject) {
+/*      var count = DWObject.SourceCount;
+      for (let j = 0; j < count; j++) {
+        if (DWObject.GetSourceNameItems(j).indexOf("WIA") == -1) {
+          document.getElementById("source").options.add(new Option(DWObject.GetSourceNameItems(j), j))
+        }
+      }
+
+      var source = document.getElementById("source")
+      var value = source.value*/
+      DWObject.IfUseTwainDSM = true
+      DWObject.Width = 0;
+      DWObject.Height = 0;
+      for (var i = 0; i < scriptLanguages.length; i++)
+        document.getElementById("ddlLanguages").options.add(new Option(scriptLanguages[i].desc, i));
+      document.getElementById("ddlLanguages").options.selectedIndex = 2;
+      if (DWObject.Addon.PDF.IsModuleInstalled()) {
+        /** PDFR already installed */
+      }
+      else {
+        ObjString = [];
+        ObjString.push('<div class="p15" id="pdfr-install-dlg">');
+        ObjString.push('The <strong>PDF Rasterizer</strong> is not installed on this PC. Please click the button below to get it installed');
+        ObjString.push('<p class="tc mt15 mb15"><input type="button" value="Install PDF Rasterizer" onclick="downloadPDFR();" class="btn lgBtn bgBlue" /><hr></p>');
+        ObjString.push('<i><strong>The installation is a one-time process</strong> <br />It might take some time depending on your network.</i>');
+        ObjString.push('</div>');
+        Dynamsoft.WebTwainEnv.ShowDialog(400, 280, ObjString.join(''));
+      }
+    }
+  }
+  window.onload = function () {
+    if (Dynamsoft) {
+      Dynamsoft.WebTwainEnv.Load();
+    }
+  };
+  function AcquireImage() {
+    console.log("进入acquireImage")
+    //sessionStorage.setItem("isScanDone",0)//设置扫描开始标志,还没扫描成功
+    templateID = sessionStorage.getItem("templateID");
+     bSelected = DWObject.SelectSource();
+    if (bSelected){
+      DWObject.OpenSource();
+    }else {
+        return
+    }
+    DWObject.IfShowUI = false;// 隐藏默认UI
+    DWObject.IfFeederEnabled = true;// 使用自动进纸
+    DWObject.IfDuplexEnabled = true;//双 true
+    DWObject.IfUseTwainDSM = true;
+    DWObject.PixelType = EnumDWT_PixelType.TWPT_GRAY; // 扫描灰度图
+    DWObject.Resolution = 200; // 使用200DPI扫描
+    DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_A4//设置扫描的纸张 2018年11月29日10:09:08
+    DWObject.RegisterEvent('OnPostTransfer', function () {
+      DWObject.IfShowFileDialog = false;
+      DWObject.SetSelectedImageIndex(DWObject.CurrentImageIndexInBuffer, DWObject.CurrentImageIndexInBuffer++);
+      function OnSuccess() {
+        console.log('successful2');
+      }
+
+      function OnFailure(errorCode, errorString) {
+        alert("onPostTransfer失败！或者完成！")
+        alert(errorString);
+      }
+
+      if (DWObject.HowManyImagesInBuffer == 0) {
+        ///alert("No images in buffer.");
+        return;
+      }
+      upLoadToOss()
+    });
+    DWObject.RegisterEvent('OnPostAllTransfers',function () {
+      DWObject.CloseSource();
+    })
+    function OnSuccess() {
+      console.log('successful1');
+      DWObject.CloseSource()
+    }
+    function OnFailure(errorCode, errorString) {
+      sessionStorage.setItem("isScanDone", 1)
+      DWObject.CloseSource()
+    }
+
+    DWObject.AcquireImage(OnSuccess, OnFailure);//  开始扫描
+  }
+
+  /*******************/
+  /* Upload to Azure */
+
+  var Base64Binary = {
+    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+    decode: function (input, arrayBuffer) {
+      //get last chars to see if are valid
+      var lkey1 = this._keyStr.indexOf(input.charAt(input.length - 1));
+      var lkey2 = this._keyStr.indexOf(input.charAt(input.length - 2));
+      var bytes = (input.length / 4) * 3;
+      if (lkey1 == 64) bytes--; //padding chars, so skip
+      if (lkey2 == 64) bytes--; //padding chars, so skip
+      var uarray;
+      var chr1, chr2, chr3;
+      var enc1, enc2, enc3, enc4;
+      var i = 0;
+      var j = 0;
+      if (arrayBuffer)
+        uarray = new Uint8Array(arrayBuffer);
+      else
+        uarray = new Uint8Array(bytes);
+      input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+      for (i = 0; i < bytes; i += 3) {
+        //get the 3 octects in 4 ascii chars
+        enc1 = this._keyStr.indexOf(input.charAt(j++));
+        enc2 = this._keyStr.indexOf(input.charAt(j++));
+        enc3 = this._keyStr.indexOf(input.charAt(j++));
+        enc4 = this._keyStr.indexOf(input.charAt(j++));
+        chr1 = (enc1 << 2) | (enc2 >> 4);
+        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+        chr3 = ((enc3 & 3) << 6) | enc4;
+        uarray[i] = chr1;
+        if (enc3 != 64) uarray[i + 1] = chr2;
+        if (enc4 != 64) uarray[i + 2] = chr3;
+      }
+      return uarray;
+    }
+  };
+
+  /*  function uploadImageInner_azure(blobSasUrl, fileDataAsArrayBuffer) {
+   var ajaxRequest = new XMLHttpRequest();
+   try {
+   ajaxRequest.open('PUT', blobSasUrl, true);
+   ajaxRequest.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+   ajaxRequest.send(fileDataAsArrayBuffer);
+   ajaxRequest.onreadystatechange = function () {
+   if (ajaxRequest.readyState == 4) {
+   console.log('Upload image to azure server successfully.');
+   }
+   };
+   }
+   catch (e) {
+   console.log("can't upload the image to server.\n" + e.toString());
+   }
+   }
+
+   function preparetoUploadtoAzure(__name) {
+   var uploadfilename = '';
+   //For JPEG, upload the current image
+   if (document.getElementsByName('ImageType')[0].checked) {
+   DWObject.SelectedImagesCount = 1;
+   DWObject.SetSelectedImageIndex(0, DWObject.CurrentImageIndexInBuffer);
+   DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_JPG);
+   uploadfilename = __name + '.jpg';
+   }
+   else { //For TIFF, PDF, upload all images
+   var count = DWObject.HowManyImagesInBuffer;
+   DWObject.SelectedImagesCount = count;
+   for (var i = 0; i < count; i++) {
+   DWObject.SetSelectedImageIndex(i, i);
+   }
+   if (document.getElementsByName('ImageType')[1].checked) {
+   DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_TIF);
+   uploadfilename = __name + '.tif';
+   }
+   else {
+   DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_PDF);
+   uploadfilename = __name + '.pdf';
+   }
+   }
+
+   var strImg, aryImg, _uint8_STR, _bin_ARR, _blobImg;
+   strImg = DWObject.SaveSelectedImagesToBase64Binary();
+   // convert base64 to Uint8Array
+   var bytes = (strImg.length / 4) * 3;
+   var _temp = new ArrayBuffer(bytes);
+   _uint8_STR = Base64Binary.decode(strImg, _temp);
+
+   // convert Uint8Array to blob
+   _blobImg = new Blob([_uint8_STR]);
+   // upload to Azure server
+   var xhr = new XMLHttpRequest();
+   xhr.onreadystatechange = function () {
+   if (xhr.readyState == 4) {
+   uploadImageInner_azure(xhr.responseText, _blobImg);
+   }
+   };
+   var actionPageFullPath = CurrentPath + 'action/' + 'azure.aspx?imageName=' + uploadfilename;
+   xhr.open('GET', actionPageFullPath, true);
+   xhr.send();
+   }*/
+  /*******************/
+
+</script>
+</body>
+</html>
