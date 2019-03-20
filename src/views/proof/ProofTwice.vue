@@ -50,6 +50,7 @@
         <el-row>
           <el-button @click="id_more_info=false,id_list[id_modifying_item].status=1" type="primary"> 确认 </el-button>
           <!--
+          id 看不清
                     <el-button @click="id_more_info=false,id_list[id_modifying_item].status=-1" type="warning"> 看不清 </el-button>
           -->
           <el-button @click="handleBlur" type="warning"> 看不清 </el-button>
@@ -97,6 +98,7 @@
         <el-row style="margin: 10px">
           <el-button @click="option_more_info=false,option_list[option_modifying_item].status=1" type="primary"> 确认
           </el-button>
+          <!--选择 看不清-->
           <el-button @click="option_more_info=false,option_list[option_modifying_item].status=-1" type="warning"> 看不清
           </el-button>
           <el-button @click="handleProof(option_list[option_modifying_item].img.split('/')[2])" type="warning"> 整卷校对 </el-button>
@@ -126,6 +128,7 @@
         </el-row>
         <el-row style="margin: 10px">
           <el-button @click="setScore()" type="primary"> 确认 </el-button>
+          <!--分数 看不清-->
           <el-button @click="cancelScore()" type="warning"> 看不清 </el-button>
           <el-button @click="handleProof(veri_list[score_list[score_modifying_item].veri_list_indexes[score_modifying_img]].img.split('/')[2])" type="warning"> 整卷校对 </el-button>
         </el-row>
@@ -138,7 +141,7 @@
 </template>
 
 <script>
-  import {getVeriList, toConfirm, getStudentNameByNumber} from '@/api/proof/proof'
+  import {getVeriListTwice, toConfirmTwice, getStudentNameByNumber} from '@/api/proof/proof'
   import ElForm from "../../../node_modules/element-ui/packages/form/src/form";
   import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item";
   import ElInput from "../../../node_modules/element-ui/packages/input/src/input";
@@ -197,13 +200,13 @@
         })
       },
       getData () {
-        getVeriList(this.listQuery).then(response => {
+        getVeriListTwice(this.listQuery).then(response => {
           this.veri_list = response.data
           this.regroupData()
         })
       },
       confirm () {
-        toConfirm({verifies: this.veri_list}).then(response => {
+        toConfirmTwice({verifies: this.veri_list}).then(response => {
           this.$message({
             type: 'success',
             message: '校对成功!',

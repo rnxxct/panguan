@@ -3,6 +3,8 @@
     <iframe src="/panguan/static/scan/DWT_Scan_Upload_Demo.html" id="iframe" ref="iframe"
             frameborder="3" scrolling="auto" style="margin: 0 auto;border: 2px;width: 500px;height: 300px;display: none"></iframe>
     <div>
+      <el-button type="primary" @click.native="handleMore" icon="el-icon-plus" style="float: right">查看更多
+      </el-button>
       <el-table :data="tableData" :border=true stripe style="width:100%; margin: auto">
         <el-table-column align="left" width="100%" prop="name" label="考试名称"></el-table-column>
         <el-table-column align="left" prop="subjectName" label="学科"></el-table-column>
@@ -32,6 +34,11 @@
         </el-table-column>
       </el-table>
       <el-dialog title="清空扫描数据" :visible.sync="isClear" width="20%">
+        <el-form :inline="true" algin="left">
+          <el-form-item label="请输入密码">
+            <el-input autocomplete="off" type="password" v-model="password"></el-input>
+          </el-form-item>
+        </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="isClear=false">取 消</el-button>
           <el-button type="primary"  @click.native="cleanData">确 定</el-button>
@@ -63,6 +70,7 @@
     },
     data(){
       return {
+        password: '',
         isClear:false,
         testID:0,
         tableData: [],
@@ -91,6 +99,10 @@
       this.isDownloadMsiTimer()
     },
     methods: {
+      handleMore(){
+        this.listQuery.isAll = true
+        this.initTable()
+      },
       isDownloadMsiTimer(){
         var timer1= setInterval(function () {
           if (sessionStorage.getItem("downloadMis")==1){
@@ -171,6 +183,10 @@
           this.testID = row.id
       },
       cleanData(){
+        if (this.password !== 'qingkong') {
+          alert('密码错误')
+          return;
+        }
         this.isClear=false
         emptyData({testID:this.testID}).then(response=>{
             this.$message({

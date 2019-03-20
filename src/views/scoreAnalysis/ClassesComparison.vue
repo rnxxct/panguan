@@ -64,7 +64,7 @@
             data:['平均分','最高分'],
             selected: {
               '平均分': true,
-              '最高分':false
+              '最高分': true
             }
           },
           toolbox: {
@@ -101,8 +101,8 @@
           series : [
             {
               name:'平均分',
-              type:'bar',
-              barWidth : 60,
+              type:'line',
+              // barWidth : 60,
               data:this.average,
               markPoint : {
                 data : [
@@ -126,8 +126,8 @@
             },
             {
               name:'最高分',
-              type:'bar',
-              barWidth : 60,
+              type:'line',
+              // barWidth : 60,
               data:this.maxScore,
               markPoint : {
                 data : [
@@ -170,7 +170,7 @@
                 trigger: 'axis',
               },
               legend: {
-                data:['及格率','良好率','优秀率'],
+                data:['及格率(60%)','良好率(80%)','优秀率(90%)'],
               },
               toolbox: {
                 show : true,
@@ -210,7 +210,7 @@
               ],
               series : [
                 {
-                  name:'及格率',
+                  name:'及格率(60%)',
                   type:'line',
                   data:this.pass,
                   barWidth : 60,
@@ -229,7 +229,7 @@
                   }
                 },
                 {
-                  name:'良好率',
+                  name:'良好率(80%)',
                   type:'line',
                   data:this.good,
                   markPoint : {
@@ -244,7 +244,7 @@
                   }
                 },
                 {
-                  name:'优秀率',
+                  name:'优秀率(90%)',
                   type:'line',
                   data:this.outstanding,
                   markPoint : {

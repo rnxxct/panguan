@@ -5,7 +5,7 @@
         <img src="../../static/images/logo.png"/>
       </div>
       <div class="contact">
-        <img src="../../static/images/tel.png"/>&nbsp;&nbsp;<label class="phone">188-1088-5651</label>
+        <a href="http://app.jouletek.com:8080/panguan/index.html#/Download"><img src="../../static/images/tel.png"/></a>&nbsp;&nbsp;<label class="phone">188-1088-5651</label>
       </div>
     </div>
     <div class="main">

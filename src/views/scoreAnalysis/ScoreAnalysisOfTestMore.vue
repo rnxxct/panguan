@@ -176,6 +176,7 @@
         currentClasses: '0',
         currentRow: -1,
         currentValOfAnswer: '',
+        currentServerFileID: '',
         fileName: '',
         cols: [
           {
@@ -542,6 +543,7 @@
         return new Promise((resolve, reject) => {
           getImgUrls({studentID: this.currentRow.studentID, testID: this.listQuery.testID}).then(response => {
             this.currentData = response.data
+            this.currentServerFileID = response.data.urls[0].split("/")[5];
             this.imageList1 = []
             this.imageList2 = []
             this.imageList = response.data.urls

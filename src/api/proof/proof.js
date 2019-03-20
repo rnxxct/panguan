@@ -11,6 +11,15 @@ export function getVeriList(query) {
     data: QS.stringify(query)
   })
 }
+
+export function getVeriListTwice(query) {
+  return request({
+    url:'/verify/twice/list',
+    method:'post',
+    data: QS.stringify(query)
+  })
+}
+
 export function toConfirm(query) {
   return request({
     url:'/verify/processing',
@@ -18,6 +27,15 @@ export function toConfirm(query) {
     data: query
   })
 }
+
+export function toConfirmTwice(query) {
+  return request({
+    url:'/verify/twice/processing',
+    method:'post',
+    data: query
+  })
+}
+
 export function getSheetOfStudent(query) {
   return request({
     url:'/verify/sheet/student',

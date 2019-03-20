@@ -10,6 +10,15 @@ export function getList(query) {
     data:QS.stringify(query)
   })
 }
+
+export function addCharacter(query) {
+  return request({
+    url:'/teacher/update/character',
+    method:'post',
+    data:QS.stringify(query)
+  })
+}
+
 export function addTeacher(query) {
   return request({
     url:'/teacher/add',

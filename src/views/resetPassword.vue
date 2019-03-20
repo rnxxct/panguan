@@ -81,7 +81,8 @@
               message: '密码不能为空',
               type: "warning",
               duration: 1000
-            })
+            });
+            return
           }
           if (this.ruleForm2.password !== this.ruleForm2.password2) {
             this.$message({

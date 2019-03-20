@@ -16,14 +16,20 @@
     "ali-oss": "^6.1.0",
     "axios": "^0.18.0",
     "canvg": "^1.5.3",
+    "defaultable": "^0.7.2",
     "define-properties": "^1.1.3",
+    "dns": "^0.2.2",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.7",
+    "emailjs": "^2.2.0",
     "file-saver": "^2.0.0",
     "html2canvas": "^1.0.0-alpha.12",
     "imports-loader": "^0.8.0",
     "jspdf": "^1.5.3",
     "node-sass": "^4.9.3",
+    "nodemailer": "^5.1.1",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemailer.js": "0.0.2-security",
     "sass-loader": "^7.1.0",
     "snapsvg": "^0.5.1",
     "vue": "^2.5.2",
@@ -94,5 +100,19 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": "._.postcssrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rnxxct/panguan.git"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rnxxct/panguan/issues"
+  },
+  "homepage": "https://github.com/rnxxct/panguan#readme"
 }

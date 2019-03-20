@@ -64,7 +64,7 @@
            <!-- <el-button type="success" @click="createExam">
               创建考试
             </el-button>-->
-            <el-button type="success" @click="handleScan">
+            <el-button type="success" style="display: none" @click="handleScan">
               扫描答案
             </el-button>
             <el-button type="warning" @click="handleCanvas">
@@ -190,9 +190,15 @@
           this.imageList = response.data.imgURL
           this.docURL = response.data.docURL
           if (this.imageList.length == 1) {
+            this.imageList1.splice(-1);
+            console.log('单面')
             this.picSize = 1;
             this.imageList1[0] = this.imageList[0]
           } else {
+            this.imageList1.splice(0,this.imageList1.length);
+            this.imageList2.splice(0,this.imageList2.length);
+            this.picSize = 2;
+            console.log('多面')
             for (let i = 0; i < this.imageList.length; i++) {
               if (i % 2 == 0) {
                 this.imageList1.push(this.imageList[i])

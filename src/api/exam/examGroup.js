@@ -46,6 +46,20 @@ export function getGradeAnalysisList(query) {
     data:QS.stringify(query)
   })
 }
+export function getGradeAnalysisList1(query) {
+  return request({
+    url:'/multiTest/classesComparison1',
+    method:'post',
+    data:QS.stringify(query)
+  })
+}
+export function getGradeAnalysisListNew(query) {
+  return request({
+    url:'/multiTest/classesComparisonNew',
+    method:'post',
+    data:QS.stringify(query)
+  })
+}
 export function getQuotaList(query) {
   return request({
     url:'/multiTest/quotaHitAndContributionRate',

@@ -4,6 +4,7 @@
       <el-button type="info" @click="handlePre">上一面</el-button>
       <el-button type="warning" icon="el-icon-refresh" @click="handleRotate">旋转</el-button>
       <el-button type="info" @click="handleNext">下一面</el-button>
+      <el-button type="danger" @click="handleDis">这是废卷</el-button>
       <el-carousel :autoplay="false" height="700px" arrow="never"  indicator-position="none" :loop=false v-if="done==1"
                    ref="carousel">
         <el-carousel-item v-for="(item,item_index) in imgsList" :key="item.id" >
@@ -19,6 +20,9 @@
         <el-form-item label="学生学号">
           <el-input  v-model="proofParams.studentNumber" placeholder="请输入内容"></el-input>
         </el-form-item>
+          <el-form-item label="第几张卷">
+              <el-input  v-model="proofParams.sheetNum" placeholder="请输入1或2"></el-input>
+          </el-form-item>
       </el-form>
       <el-table
         :data="data"
@@ -79,6 +83,12 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="isSure=false">取 消</el-button>
         <el-button type="primary" @click.native="toProof">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="确定废卷" :visible.sync="isDis" width="20%">
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isDis=false">取 消</el-button>
+        <el-button type="primary" @click.native="toDis">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -163,6 +173,7 @@
           sheetID: '',
           studentName: '',
           studentNumber: '',
+            sheetNum: '',
           questions: [],
           disable: false,
         },
@@ -206,11 +217,12 @@
       // 显示行
       showTr(row, index){
         let show = (row.row._parent ? (row.row._parent._expanded && row.row._parent._show) : true)
-        row.row._show = show
-        return show ? '' : 'display:none;'
+        row.row._expanded = show
+        return show ? '' : ''
       },
       // 展开下级
       toggle(trIndex){
+        console.log('------------'+trIndex)
         let record = this.data[trIndex]
         record._expanded = !record._expanded
       }
@@ -238,6 +250,13 @@
           })
           return
         }
+          if (this.proofParams.sheetNum == '') {
+              this.$message({
+                  type: 'warning',
+                  message: '请输入卷号！'
+              })
+              return
+          }
         this.isSure = true
       },
       toProof(){
@@ -260,6 +279,21 @@
         toConfirmSheet(this.proofParams).then(response => {
           this.$message({
             message: '校对成功',
+            type: "success",
+            duration: 300
+          });
+          this.$router.back(-1)
+        })
+      },
+      handleDis(){
+        this.isDis = true
+      },
+      toDis(){
+        this.isDis = false
+        this.proofParams.disable = true
+        toConfirmSheet(this.proofParams).then(response => {
+          this.$message({
+            message: '废卷成功',
             type: "success",
             duration: 300
           });

@@ -10,6 +10,7 @@
               ref="tree"
               accordion
               :defaultCheckedKeys="checkedKeys"
+              :default-expand-all="true"
               @node-click="handleClick"
               :highlight-current="true"
               :expand-on-click-node="true"
@@ -242,8 +243,8 @@
         for (let i = 0; i < this.classes.length; i++) {
           series.push({
             name: this.classes[i].text,
-            barWidth: 60,
-            type: 'bar',
+            // barWidth: 60,
+            type: 'line',
             data: this.getAnswersNumbers(i),
             itemStyle: {
               normal: {
@@ -559,25 +560,27 @@
           var array = new Array()
           for (let j = 0; j < result.length; j++) {
             for (let x = 0; x < result[j].answers.length; x++) {
-              let question = new Object()
-              if (x == 0) {
-                question.number = result[j].label
-                question.option = result[j].answers[x].answerName + " (正确)"
-              } else {
-                question.number = ""
-                question.option = result[j].answers[x].answerName
-              }
-              /*
+              if (!(result[j].label.includes("步骤") && result[j].answers[0].answerName.includes("0.0"))) {
+                let question = new Object()
+                if (x == 0) {
+                  question.number = result[j].label
+                  question.option = result[j].answers[x].answerName + " (正确)"
+                } else {
+                  question.number = ""
+                  question.option = result[j].answers[x].answerName
+                }
+                /*
                question.option = result[j].answers[x].answerName
                */
-              question.total = result[j].answers[x].numberAndPresent
-              let studentName = "";
-              for (let s = 0; s < result[j].answers[x].students.length; s++) {
-                studentName += result[j].answers[x].students[s].name + ","
+                question.total = result[j].answers[x].numberAndPresent
+                let studentName = "";
+                for (let s = 0; s < result[j].answers[x].students.length; s++) {
+                  studentName += result[j].answers[x].students[s].name + ","
+                }
+                studentName = studentName.substr(0, studentName.length - 1)
+                question.students = studentName
+                array.push(question)
               }
-              studentName = studentName.substr(0, studentName.length - 1)
-              question.students = studentName
-              array.push(question)
             }
             let question = new Object()
             question.number = ""
@@ -586,6 +589,7 @@
             question.students = ""
             array.push(question)
           }
+          console.log(array)
           import('@/vendor/Export2Excel').then(excel => {
             const tHeader = ['题号', '选项', '汇总', '名单']
             const filterVal = ['number', 'option', 'total', 'students']

@@ -18,9 +18,22 @@
             type="primary" plain
             @click="handleDelete(scope.$index, scope.row)">删除
           </el-button>
+          <el-button
+            size="mini"
+            type="primary" plain
+            @click="handleSetCharacter(scope.$index, scope.row)">设置角色
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="设置角色" :visible.sync="character" @close='closeDialog'>
+      <div class="dialog-footer" align="center">
+        <el-button type="primary" @click="toChangeCharacter(1)">班 主 任</el-button>
+        <el-button type="primary" @click="toChangeCharacter(2)">备 课 组 长</el-button>
+        <el-button type="primary" @click="toChangeCharacter(3)">年 级 主 任</el-button>
+        <el-button @click="character=false">取 消</el-button>
+      </div>
+    </el-dialog>
     <el-dialog title="新增教师" :visible.sync="isAdd" @close='closeDialog'>
       <el-form :model="addForm" :inline=true label-width="80px" align="left">
         <el-form-item label="姓名">
@@ -159,7 +172,7 @@
   </div>
 </template>
 <script>
-  import {getList, addTeacher, deleteTeacher, updateTeacher} from '@/api/TeachingAffair/teacherOfSchool'
+  import {getList, addTeacher, addCharacter, deleteTeacher, updateTeacher} from '@/api/TeachingAffair/teacherOfSchool'
   import {getList as getSubject} from '@/api/subject/subject'
   import {getList as getClass} from '@/api/TeachingAffair/classOfSchool'
   import ElSelectDropdown from "../../../node_modules/element-ui/packages/select/src/select-dropdown";
@@ -174,6 +187,7 @@
     data(){
       return {
         subjectOfClass: 0,
+        character: false,
         isAdd: false,
         isDelete: false,
         isEdit: false,
@@ -209,6 +223,10 @@
         },
         deleteForm: {
           id: ''
+        },
+        characterForm: {
+          id: '',
+          characters: 0,
         }
       }
     },
@@ -257,6 +275,23 @@
       handleDelete(index, row){
         this.isDelete = true
         this.deleteForm = row
+      },
+      handleSetCharacter(index, row){
+        this.character = true
+        this.characterForm = row
+        console.log(row)
+      },
+      toChangeCharacter(x){
+        this.characterForm.characters = x;
+        addCharacter(this.characterForm).then(response => {
+          this.$message({
+            message: '添加成功',
+            type: "success",
+            duration: 600
+          });
+          this.initTable()
+          this.character = false;
+        })
       },
       toAdd(){
         if (this.addForm.username == '' || this.addForm.loginName == "") {

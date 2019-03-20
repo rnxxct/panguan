@@ -10,6 +10,15 @@ export function getList(query) {
     data:QS.stringify(query)
   })
 }
+
+export function getMultiClasses(query) {
+  return request({
+    url:'multi/studentOfSchool/list',
+    method:'post',
+    data:QS.stringify(query)
+  })
+}
+
 export function addTeacher(query) {
   return request({
     url:'/teacher/add',

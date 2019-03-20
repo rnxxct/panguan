@@ -18,15 +18,38 @@
 
 
   var bSelected = false;
-  function AcquireImage() {
+  function AcquireImage(pixelType,pageSize,resolution) {
+    if (pixelType==null) Twain_pixelType = Twain_defaultPixelType;
+    else if (pixelType.toLowerCase() == "bw") Twain_pixelType = EnumDWT_PixelType.TWPT_BW;
+    else if (pixelType.toLowerCase() == "gray") Twain_pixelType = EnumDWT_PixelType.TWPT_GRAY;
+    else if (pixelType.toLowerCase() == "rgb") Twain_pixelType = EnumDWT_PixelType.TWPT_RGB;
+    else Twain_pixelType = Twain_defaultPixelType;
+
+    if (pageSize==null) Twain_pageSize = Twain_defaultPageSize;
+    else if (pageSize.toLowerCase() == "a3") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A3;
+    else if (pageSize.toLowerCase() == "a4") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
+    else if (pageSize.toLowerCase() == "a5") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A5;
+    else if (pageSize.toLowerCase() == "b5") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_B5LETTER;
+    else Twain_pageSize = Twain_defaultPageSize;
+
+    if (resolution==null) Twain_resolution = Twain_defaultResolution;
+    else if (resolution.toLowerCase() == "100") Twain_resolution = 100;
+    else if (resolution.toLowerCase() == "150") Twain_resolution = 150;
+    else if (resolution.toLowerCase() == "200") Twain_resolution = 200;
+    else if (resolution.toLowerCase() == "300") Twain_resolution = 300;
+    else if (resolution.toLowerCase() == "600") Twain_resolution = 600;
+    else Twain_resolution = Twain_defaultResolution;
+
     OnScanButtonClick();
   }
+
 
   var isDEBUG = false;
 
   if (isDEBUG) {
     //sessionStorage.setItem("examID","303");
-    //sessionStorage.setItem("userToken","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IjE2N2U5M2JjM2Y4ZTExMDUyMzZjYjI1YTdhZDg1NDc4NmQ0ZDg0YzNjZGMwOWNhMTJhNzlmNGY1YmVhZjRiZGIiLCJyb2xlIjoiYWRtaW4iLCJJRCI6MiwiZXhwIjoxNTUwNTg2MDYwLCJ1c2VybmFtZSI6ImFkbWluIn0.0LRcpJYZ6vH7G402HroVLZc2UnhZ-5FTkWbvBZ17qyg");
+    // sessionStorage.setItem("userToken","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IjE2N2U5M2JjM2Y4ZTExMDUyMzZjYjI1YTdhZDg1NDc4NmQ0ZDg0YzNjZGMwOWNhMTJhNzlmNGY1YmVhZjRiZGIiLCJyb2xlIjoiYWRtaW4iLCJJRCI6MiwiZXhwIjoxNTUxNTY4ODk4LCJ1c2VybmFtZSI6ImFkbWluIn0.9oornmHp7E9IWoCeAELn2qUOWjpJky0Uaol1GpFUcio");
+    // sessionStorage.getItem("userToken");
   }
 
   function _bzlog(s) {
@@ -53,6 +76,13 @@
   var Twain_scanCounter = 0;
   var Twain_uploadCounter = 0;
   var Twain_imgBlobQueue = [];
+  var Twain_hardwareID = 'unknown';
+  var Twain_defaultPixelType = EnumDWT_PixelType.TWPT_GRAY;
+  var Twain_defaultPageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
+  var Twain_defaultResolution = 200;
+  var Twain_pixelType = Twain_defaultPixelType;
+  var Twain_pageSize = Twain_defaultPageSize;
+  var Twain_resolution = Twain_defaultResolution;
 
   function Twain_stateChangeEvent(e)
   {
@@ -80,7 +110,7 @@
       DWObject.RegisterEvent("OnPostTransfer", Twain_OnPostTransfer);
       DWObject.RegisterEvent("OnPostAllTransfers", Twain_OnPostAllTransfers);
       setTimeout(Twain_UploadProcessor,Twain_timerInterval);
-      _bzlog('scanNew v4.0 started');
+      _bzlog('scanNew v4.4 started');
     }
   }
 
@@ -106,6 +136,19 @@
     }
   }
 
+  function Twain_getHardwareID() {
+    DWObject.Capability = EnumDWT_Cap.CAP_SERIALNUMBER;
+    DWObject.CapGet();
+    var tempValue = 'unknown';
+    DWObject.CapValueType > 8 ? tempValue = DWObject.CapValueString : tempValue = DWObject.CapValue;
+    if (DWObject.CapValueType == EnumDWT_CapValueType.TWTY_BOOL) {
+      tempValue == 0 ? tempValue = 'FALSE' : tempValue = 'TRUE';
+    }
+    //_bzlog('The value type of the CAP_SERIALNUMBER is ' + DWObject.CapValueType);
+    //_bzlog('The type of the CAP_SERIALNUMBER is ' + DWObject.CapType);
+    //_bzlog('The value of the CAP_SERIALNUMBER is ' + tempValue);
+    return tempValue;
+  }
 
   function Twain_StartScan() {
     if (Twain_isScanning == true) return;
@@ -122,15 +165,21 @@
       DWObject.IfShowUI = false;
       DWObject.IfFeederEnabled = true;
       DWObject.IfDuplexEnabled = true;
-      DWObject.PixelType = EnumDWT_PixelType.TWPT_GRAY;
-      DWObject.Resolution = 200;
+      DWObject.PixelType = Twain_pixelType;
+      DWObject.Resolution = Twain_resolution;
       DWObject.IfDisableSourceAfterAcquire = true;
       DWObject.IfShowFileDialog = false;
-      DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
+      DWObject.PageSize = Twain_pageSize;
       DWObject.BufferMemoryLimit = 100;
       //DWObject.TransferMode = EnumDWT_TransferMode.TWSX_NATIVE;
       DWObject.TransferMode = EnumDWT_TransferMode.TWSX_MEMORY;
       DWObject.IfAllowLocalCache = true;
+      //DWObject.JPEGQuality = 65;
+      Twain_hardwareID = Twain_getHardwareID();
+      _bzlog('HwID='+Twain_hardwareID);
+      DWObject.IfAutomaticDeskew = true;
+      DWObject.IfAutoDiscardBlankpages = false;
+      _bzlog("scan options: pt="+Twain_pixelType+",ps="+Twain_pageSize+",rs="+Twain_resolution);
       DWObject.AcquireImage(Twain_OnAcquireSuccess, Twain_OnAcquireFailure);
       Twain_stateChangeEvent("started");
     } else {
@@ -186,7 +235,7 @@
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
       },
       url: 'http://app.jouletek.com:8080/panguanb/scan/start',
-      data: {testID: testID},
+      data: {testID: testID, hwID: Twain_hardwareID},
       success: function (responseData) {
         _bzlog("getSignedUrl success,"+Twain_uploadCounter);
         if (Twain_isShuttingDown() == true) return;
@@ -199,6 +248,7 @@
         _bzlog("getSignedUrl failed,"+Twain_uploadCounter);
         if (Twain_isShuttingDown() == true) return;
         Twain_isHttpPosting--;
+        Twain_uploadCounter--;
       }
     })
   }

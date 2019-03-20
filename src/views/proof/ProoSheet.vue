@@ -20,6 +20,9 @@
         <el-form-item label="学生学号">
           <el-input  v-model="proofParams.studentNumber" placeholder="请输入内容"></el-input>
         </el-form-item>
+          <el-form-item label="第几张卷">
+              <el-input  v-model="proofParams.sheetNum" placeholder="请输入1或2"></el-input>
+          </el-form-item>
       </el-form>
       <el-table
         :data="data"
@@ -191,6 +194,7 @@
           sheetID: '',
           studentName: '',
           studentNumber: '',
+            sheetNum: '',
           questions: [],
           disable: false,
         },
@@ -235,8 +239,10 @@
       showTr(row, index)
       {
         let show = (row.row._parent ? (row.row._parent._expanded && row.row._parent._show) : true)
-        row.row._show = show
-        return show ? '' : 'display:none;'
+        // row.row._show = show
+        // return show ? '' : 'display:none;'
+        row.row._expanded = show
+        return show ? '' : ''
       },
       // 展开下级
       toggle(trIndex)
@@ -270,6 +276,13 @@
           })
           return
         }
+          if (this.proofParams.sheetNum == '') {
+              this.$message({
+                  type: 'warning',
+                  message: '请输入卷号！'
+              })
+              return
+          }
         this.isSure = true
       },
       toProof(){

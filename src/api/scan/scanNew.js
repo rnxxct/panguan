@@ -3,6 +3,13 @@
  */
 import  request from  '@/utils/request'
 import QS from 'qs'
+export function getScanPaperType(query) {
+  return request({
+    url:'/scan/paper/type',
+    method:'post',
+    data:QS.stringify(query)
+  })
+}
 export function getList(query) {
   return request({
     url:'/students/not/scan',

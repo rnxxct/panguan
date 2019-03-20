@@ -25,6 +25,47 @@
         </div>
         <div style=" border-bottom: 2px solid black;border-left: 2px solid black">
           <div class="td" style="height: 31mm;width: 25mm;border-right: 2px solid black">
+            <div class="td" style="width:9mm">理科实验</div>
+            <div class="td" style="border-left:1px solid black;">
+              <div v-for="item in scienceSuper" style="height: 5mm;border-bottom: 1px solid black;">
+                <div class="td" style="width: 9mm;">{{item.classNumber}}</div>
+                <div class="td" style="width: 5mm;">{{item.classTotal}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="td" style="width: 80mm;border-right: 2px solid black" v-for="item in scienceSuperArray">
+            <div v-for="teacher in item.classComparisonDetails" style="height: 5mm;border-bottom: 1px solid black;">
+              <div class="td"
+                   style="width: 11mm;border-right: 0.5px solid black;">
+                {{teacher.teacherName}}
+              </div><div class="td" style="width: 10mm;border-right: 0.5px solid black;;">
+              {{teacher.average}}
+            </div><div class="td"
+                       style="width: 5mm;border-right: 0.5px solid black;">
+              {{teacher.averageRank}}
+            </div><div class="td"
+                       style="width: 12mm;border-right: 0.5px solid black;">
+              {{teacher.passRate}}
+            </div><div class="td"
+                       style="width: 5mm;border-right: 0.5px solid black;">
+              {{teacher.passRateRank}}
+            </div><div class="td"
+                       style="width: 10mm;border-right: 0.5px solid black;">
+              {{teacher.excellentRate}}
+            </div><div class="td"
+                       style="width: 5mm;border-right: 0.5px solid black;">
+              {{teacher.excellentRateRank}}
+            </div><div class="td"
+                       style="width: 10mm;border-right: 0.5px solid black;">
+              {{teacher.rankSum}}
+            </div><div class="td" style="width: 5mm;">
+              {{teacher.classSubjectRank}}
+            </div>
+            </div>
+          </div>
+        </div>
+        <div style=" border-bottom: 2px solid black;border-left: 2px solid black">
+          <div class="td" style="height: 31mm;width: 25mm;border-right: 2px solid black">
             <div class="td" style="width:9mm">理</div>
             <div class="td" style="border-left:1px solid black;">
               <div v-for="item in science" style="height: 5mm;border-bottom: 1px solid black;">
@@ -64,7 +105,8 @@
             </div>
           </div>
         </div>
-        <div style="height: 31mm; border-bottom: 2px solid black;border-left: 2px solid black">
+        <!--height: 31mm;-->
+        <div style=" border-bottom: 2px solid black;border-left: 2px solid black">
           <div class="td" style="width: 25mm;border-right: 2px solid black">
             <div class="td" style="width:9mm">文</div>
             <div class="td">
@@ -130,7 +172,56 @@
             <div class="td" style="width: 5mm;">班科次</div>
           </div>
         </div>
-        <div style="height: 31mm; border-bottom: 2px solid black;border-left: 2px solid black">
+        <!--height: 31mm;-->
+        <div style=" border-bottom: 2px solid black;border-left: 2px solid black">
+          <div class="td" style="width: 25mm;border-right: 2px solid black">
+            <div class="td" style="width:9mm">理科实验</div>
+            <div class="td">
+              <div v-for="item in scienceSuper" style="height: 5mm;border-bottom: 1px solid black;border-left: 1px solid black;">
+                <div class="td"
+                     style="width: 9mm;">
+                  {{item.classNumber}}
+                </div>
+                <div class="td" style="width: 5mm;">
+                  {{item.classTotal}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="td" style="width: 80mm;border-right: 2px solid black"
+               v-for="item in scienceSuperArrayLast">
+            <div v-for="teacher in item.classComparisonDetails" style="height: 5mm;border-bottom: 1px solid black">
+              <div class="td"
+                   style="width: 11mm;border-right: 0.5px solid black;">
+                {{teacher.teacherName}}
+              </div><div class="td"
+                         style="width: 10mm;border-right: 0.5px solid black;">
+              {{teacher.average}}
+            </div><div class="td"
+                       style="width: 5mm;border-right: 0.5px solid black;">
+              {{teacher.averageRank}}
+            </div><div class="td"
+                       style="width: 12mm;border-right: 0.5px solid black;">
+              {{teacher.passRate}}
+            </div><div class="td"
+                       style="width: 5mm;border-right: 0.5px solid black;">
+              {{teacher.passRateRank}}
+            </div><div class="td"
+                       style="width: 10mm;border-right: 0.5px solid black;">
+              {{teacher.excellentRate}}
+            </div><div class="td"
+                       style="width: 5mm;border-right: 0.5px solid black;">
+              {{teacher.excellentRateRank}}
+            </div><div class="td"
+                       style="width: 10mm;border-right: 0.5px solid black;">
+              {{teacher.rankSum}}
+            </div><div class="td" style="width: 5mm;">
+              {{teacher.classSubjectRank}}
+            </div>
+            </div>
+          </div>
+        </div>
+        <div style=" border-bottom: 2px solid black;border-left: 2px solid black">
           <div class="td" style="width: 25mm;border-right: 2px solid black">
             <div class="td" style="width:9mm">理</div>
             <div class="td">
@@ -260,10 +351,13 @@
         multiTestID: '',
         classNumber: '',
         data: [],
+        scienceSuper: [],
         science: [],
         art: [],
+        scienceSuperArray: [],
         scienceArray: [],
         artArray: [],
+        scienceSuperArrayLast: [],
         scienceArrayLast: [],
         artArrayLast: []
       }
@@ -1329,26 +1423,40 @@
             ]
           }
 */
-          this.science = response.data.science
-          this.art = response.data.art
+          this.science = response.data.science;
+          this.art = response.data.art;
+          this.scienceSuper = response.data.scienceSuper;
           let scienceDetail = response.data.scienceDetail
           let artDetail = response.data.artDetail
+          let scienceSuperDetail = response.data.scienceSuperDetail;
           if (scienceDetail !== null && scienceDetail.length !== 0) {
             if (artDetail !== null && artDetail.length !== 0) {
               let scienceArray = new Array()
               let artArray = new Array()
               let scienceArrayLast = new Array()
               let artArrayLast = new Array()
+              let scienceSuperArray = new Array()
+              let scienceSuperArrayLast = new Array()
               if (scienceDetail.length >= artDetail.length) {/*根据文理科数量进行比较，使用数量最大的一方进行外层循环*/
                 for (let i = 0; i < scienceDetail.length; i++) {
                   for (let j = 0; j < artDetail.length; j++) {
                     if (scienceDetail[i].subjectName == artDetail[j].subjectName) {
                       scienceArray.push(scienceDetail[i])
                       artArray.push(artDetail[j])
+                      for (let k = 0; k < scienceSuperDetail.length; k++) {
+                        if (scienceDetail[i].subjectName == scienceSuperDetail[k].subjectName){
+                          scienceSuperArray.push(scienceSuperDetail[k]);
+                        }
+                      }
                       break
                     }
                     if (j == (artDetail.length - 1)) {
                       scienceArrayLast.push(scienceDetail[i])
+                      for (let k = 0; k < scienceSuperDetail.length; k++) {
+                        if (scienceDetail[i].subjectName == scienceSuperDetail[k].subjectName){
+                          scienceSuperArrayLast.push(scienceSuperDetail[k]);
+                        }
+                      }
                     }
                   }
                 }
@@ -1363,6 +1471,8 @@
                   }
                 }
                 /*将数据转化后放入变量*/
+                this.scienceSuperArray = scienceSuperArray;
+                this.scienceSuperArrayLast = scienceSuperArrayLast;
                 this.artArray = artArray
                 this.scienceArray = scienceArray
                 this.artArrayLast = artArrayLast
@@ -1373,15 +1483,27 @@
                     if (artDetail[i].subjectName == scienceDetail[j].subjectName) {
                       artArray.push(artDetail[i])
                       scienceArray.push(scienceDetail[j])
+                      for (let k = 0; k < scienceSuperDetail.length; k++) {
+                        if (scienceDetail[j].subjectName == scienceSuperDetail[k].subjectName){
+                          scienceSuperArray.push(scienceSuperDetail[k]);
+                        }
+                      }
                       break
                     }
                     if (j == (scienceDetail.length - 1)) {
                       artArrayLast.push(artDetail[i])
                       scienceArrayLast.push(scienceDetail[j])
+                      for (let k = 0; k < scienceSuperDetail.length; k++) {
+                        if (scienceDetail[j].subjectName == scienceSuperDetail[k].subjectName){
+                          scienceSuperArrayLast.push(scienceSuperDetail[k]);
+                        }
+                      }
                     }
                   }
                 }
                 /*将数据转化后放入变量*/
+                this.scienceSuperArray = scienceSuperArray;
+                this.scienceSuperArrayLast = scienceSuperArrayLast;
                 this.artArray = artArray
                 this.scienceArray = scienceArray
                 this.artArrayLast = artArrayLast

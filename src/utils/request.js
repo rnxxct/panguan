@@ -6,9 +6,9 @@ import  axios from 'axios'
 import {Message} from 'element-ui'
 import router from '@/router'
 const service = axios.create({
-  // baseURL:"http://app.jouletek.com:8080/panguanb/",
+  baseURL:"http://app.jouletek.com:8080/panguanb/",
 
-  baseURL:'http://localhost:8080/',
+  // baseURL:'http://localhost:8080/',
 
   timeout: 10000000 //request timeout
 })

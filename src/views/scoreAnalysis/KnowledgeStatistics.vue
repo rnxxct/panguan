@@ -128,6 +128,9 @@
       },
       initData() {
         getData(this.listQuery).then(res => {
+          if (res.msg === 'next') {
+            this.handleNext();
+          }
           this.classes = res.data.classes
           this.subjective = res.data.subjective
           this.studentsQuestionResultsOfClasses = res.data.studentsQuestionResultsOfClasses

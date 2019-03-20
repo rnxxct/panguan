@@ -200,7 +200,7 @@
          console.log(err)
          })*/
         var that=this
-        client.put("/template/" + param.file.name, param.file, {
+        client.put("/template/"  + new Date().getTime() + Math.random() + "/" + param.file.name, param.file, {
           progress: function*(percentage, cpt) {
             vthis.percentage = percentage
           }
