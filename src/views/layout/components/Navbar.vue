@@ -17,7 +17,7 @@
         <el-menu-item v-if="permission" index="/teachingAffair/teacher/">教师管理</el-menu-item>
         <el-menu-item index="/teachingAffair/student/">学生管理</el-menu-item>
       </el-submenu>
-      <el-submenu index="2" v-if="permission">
+      <el-submenu index="2">
         <template slot="title">学科管理</template>
         <el-menu-item v-if="permission" index="/subject/subject">学科管理</el-menu-item>
         <el-menu-item index="/subject/knowledgePoint">知识点管理</el-menu-item>
@@ -29,6 +29,7 @@
         <el-menu-item index="/exam">新建单科考试</el-menu-item>
         <el-menu-item index="/exam/examGroup">新建综合考试</el-menu-item>
         <el-menu-item index="/exam/list">考试列表</el-menu-item>
+          <el-menu-item index="/exam/breakdown">考试细目表</el-menu-item>
       </el-submenu>
       <el-menu-item index="/scan/scan">试卷扫描</el-menu-item>
       <el-menu-item index="/proof/examForProof">试卷校对</el-menu-item>
@@ -59,7 +60,7 @@
       ElSubmenu,
       ElMenuItemGroup,
       ErrorLog,
-      Screenfull
+      Screenfull,
     },
     data(){
       return {

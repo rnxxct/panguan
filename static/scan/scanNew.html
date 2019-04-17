@@ -1,359 +1,433 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>scan</title>
-  <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
-  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-  <script src="Resources/dynamsoft.webtwain.initiate.js"></script>
-  <script src="Resources/dynamsoft.webtwain.config.js"></script>
-  <script src="Resources/dynamsoft.webtwain.install.js"></script>
+    <title>scan</title>
+    <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="Resources/dynamsoft.webtwain.initiate.js"></script>
+    <script src="Resources/dynamsoft.webtwain.config.js"></script>
+    <script src="Resources/dynamsoft.webtwain.install.js"></script>
 </head>
 <body>
 <input type="button" value="Scan" onclick="OnScanButtonClick();"/>
 <input type="button" value="Stop" onclick="Twain_StopAll();"/>
 <div id="dwtcontrolContainer" style="display:none;"></div>
 <div class="div-fields-item"></div>
+<div id="twainThreadContext0"  class="hidden"></div>
+<div id="twainThreadContext1"  class="hidden"></div>
+<div id="twainThreadContext2"  class="hidden"></div>
+<div id="twainThreadContext3"  class="hidden"></div>
+<div id="twainThreadContext4"  class="hidden"></div>
+<div id="twainThreadContext5"  class="hidden"></div>
+<div id="twainThreadContext6"  class="hidden"></div>
+<div id="twainThreadContext7"  class="hidden"></div>
+<div id="twainThreadContext8"  class="hidden"></div>
+<div id="twainThreadContext9"  class="hidden"></div>
+<div id="twainThreadContext10" class="hidden"></div>
+<div id="twainThreadContext11" class="hidden"></div>
+<div id="twainThreadContext12" class="hidden"></div>
+<div id="twainThreadContext13" class="hidden"></div>
+<div id="twainThreadContext14" class="hidden"></div>
+<div id="twainThreadContext15" class="hidden"></div>
 <script type="text/javascript">
 
 
 
-  var bSelected = false;
-  function AcquireImage(pixelType,pageSize,resolution) {
-    if (pixelType==null) Twain_pixelType = Twain_defaultPixelType;
-    else if (pixelType.toLowerCase() == "bw") Twain_pixelType = EnumDWT_PixelType.TWPT_BW;
-    else if (pixelType.toLowerCase() == "gray") Twain_pixelType = EnumDWT_PixelType.TWPT_GRAY;
-    else if (pixelType.toLowerCase() == "rgb") Twain_pixelType = EnumDWT_PixelType.TWPT_RGB;
-    else Twain_pixelType = Twain_defaultPixelType;
+    var bSelected = false;
+    function AcquireImage(pixelType,pageSize,resolution) {
+        if (pixelType==null) Twain_pixelType = Twain_defaultPixelType;
+        else if (pixelType.toLowerCase() == "bw") Twain_pixelType = EnumDWT_PixelType.TWPT_BW;
+        else if (pixelType.toLowerCase() == "gray") Twain_pixelType = EnumDWT_PixelType.TWPT_GRAY;
+        else if (pixelType.toLowerCase() == "rgb") Twain_pixelType = EnumDWT_PixelType.TWPT_RGB;
+        else Twain_pixelType = Twain_defaultPixelType;
 
-    if (pageSize==null) Twain_pageSize = Twain_defaultPageSize;
-    else if (pageSize.toLowerCase() == "a3") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A3;
-    else if (pageSize.toLowerCase() == "a4") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
-    else if (pageSize.toLowerCase() == "a5") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A5;
-    else if (pageSize.toLowerCase() == "b5") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_B5LETTER;
-    else Twain_pageSize = Twain_defaultPageSize;
+        if (pageSize==null) Twain_pageSize = Twain_defaultPageSize;
+        else if (pageSize.toLowerCase() == "a3") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A3;
+        else if (pageSize.toLowerCase() == "a4") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
+        else if (pageSize.toLowerCase() == "a5") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_A5;
+        else if (pageSize.toLowerCase() == "b5") Twain_pageSize = EnumDWT_CapSupportedSizes.TWSS_B5LETTER;
+        else Twain_pageSize = Twain_defaultPageSize;
 
-    if (resolution==null) Twain_resolution = Twain_defaultResolution;
-    else if (resolution.toLowerCase() == "100") Twain_resolution = 100;
-    else if (resolution.toLowerCase() == "150") Twain_resolution = 150;
-    else if (resolution.toLowerCase() == "200") Twain_resolution = 200;
-    else if (resolution.toLowerCase() == "300") Twain_resolution = 300;
-    else if (resolution.toLowerCase() == "600") Twain_resolution = 600;
-    else Twain_resolution = Twain_defaultResolution;
+        if (resolution==null) Twain_resolution = Twain_defaultResolution;
+        else if (resolution.toLowerCase() == "100") Twain_resolution = 100;
+        else if (resolution.toLowerCase() == "150") Twain_resolution = 150;
+        else if (resolution.toLowerCase() == "200") Twain_resolution = 200;
+        else if (resolution.toLowerCase() == "300") Twain_resolution = 300;
+        else if (resolution.toLowerCase() == "600") Twain_resolution = 600;
+        else Twain_resolution = Twain_defaultResolution;
 
-    OnScanButtonClick();
-  }
-
-
-  var isDEBUG = false;
-
-  if (isDEBUG) {
-    //sessionStorage.setItem("examID","303");
-    // sessionStorage.setItem("userToken","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IjE2N2U5M2JjM2Y4ZTExMDUyMzZjYjI1YTdhZDg1NDc4NmQ0ZDg0YzNjZGMwOWNhMTJhNzlmNGY1YmVhZjRiZGIiLCJyb2xlIjoiYWRtaW4iLCJJRCI6MiwiZXhwIjoxNTUxNTY4ODk4LCJ1c2VybmFtZSI6ImFkbWluIn0.9oornmHp7E9IWoCeAELn2qUOWjpJky0Uaol1GpFUcio");
-    // sessionStorage.getItem("userToken");
-  }
-
-  function _bzlog(s) {
-    if (isDEBUG)
-    {
-      let d = new Date();
-      let datestring = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) +
-        " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2)
-        + "," + ("0" + d.getMilliseconds()).slice(-3) + ",";
-      console.log(datestring + s);
+        OnScanButtonClick();
     }
-  }
 
-  var examID;
-  var serverFileID;
-  var signedUrls;
 
-  var DWObject;
-  var Twain_isStopping = false;
-  var Twain_isScanning = false;
-  var Twain_isHttpPosting = 0;
-  var Twain_timerInterval = 100;
-  var Twain_batchCounter = 0;
-  var Twain_scanCounter = 0;
-  var Twain_uploadCounter = 0;
-  var Twain_imgBlobQueue = [];
-  var Twain_hardwareID = 'unknown';
-  var Twain_defaultPixelType = EnumDWT_PixelType.TWPT_GRAY;
-  var Twain_defaultPageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
-  var Twain_defaultResolution = 200;
-  var Twain_pixelType = Twain_defaultPixelType;
-  var Twain_pageSize = Twain_defaultPageSize;
-  var Twain_resolution = Twain_defaultResolution;
+    var isLogEnabled = false;
+    var isDebug = false;
 
-  function Twain_stateChangeEvent(e)
-  {
-    if (e=="upload finished") {
-      sessionStorage.setItem("isScanDone", 1);
-    } else if (e=="started") {
-      sessionStorage.setItem("isScanDone", 0);
+    if (isDebug) {
+        sessionStorage.setItem("examID","303");
+        sessionStorage.setItem("userToken","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6IjE2N2U5M2JjM2Y4ZTExMDUyMzZjYjI1YTdhZDg1NDc4NmQ0ZDg0YzNjZGMwOWNhMTJhNzlmNGY1YmVhZjRiZGIiLCJyb2xlIjoiYWRtaW4iLCJJRCI6MiwiZXhwIjoxNTU0Mjc3Mjk5LCJ1c2VybmFtZSI6ImFkbWluIn0.TKsvRPDmVLDHiASuA7JvF5y1lssPOuDQETHASH1-ThM");
+        sessionStorage.getItem("userToken");
     }
-    //if (isDEBUG) alert(e);
-  }
 
-  function OnScanButtonClick() {
-    examID = sessionStorage.getItem("examID");
-    Twain_StartScan();
-  }
-
-  Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', Twain_OnReady);
-
-  function Twain_OnReady() {
-    DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-    if (DWObject) {
-      DWObject.IfUseTwainDSM = true;
-      DWObject.Width = 0;
-      DWObject.Height = 0;
-      DWObject.RegisterEvent("OnPostTransfer", Twain_OnPostTransfer);
-      DWObject.RegisterEvent("OnPostAllTransfers", Twain_OnPostAllTransfers);
-      setTimeout(Twain_UploadProcessor,Twain_timerInterval);
-      _bzlog('scanNew v4.4 started');
-    }
-  }
-
-  function Twain_OnPostTransfer() {
-    Twain_batchCounter++;
-    Twain_scanCounter++;
-    _bzlog("q1");
-    DWObject.SelectedImagesCount = 1;
-    DWObject.SetSelectedImageIndex(0, 0);
-    DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_JPG);
-    let imgStr = DWObject.SaveSelectedImagesToBase64Binary();
-    let blobBin = Twain_dataURLtoBlob('data:image/jpg;base64,' + imgStr);
-    Twain_imgBlobQueue.push(blobBin);
-    DWObject.RemoveImage(0);
-    _bzlog("q2");
-    _bzlog('Twain_OnPostTransfer:'+DWObject.HowManyImagesInBuffer+','+Twain_imgBlobQueue.length+','+Twain_batchCounter+','+Twain_scanCounter);
-  }
-
-  function Twain_OnPostAllTransfers() {
-    _bzlog('Twain_OnPostAllTransfers');
-    if (Twain_batchCounter % 2 !== 0) {
-      alert("Error 1");
-    }
-  }
-
-  function Twain_getHardwareID() {
-    DWObject.Capability = EnumDWT_Cap.CAP_SERIALNUMBER;
-    DWObject.CapGet();
-    var tempValue = 'unknown';
-    DWObject.CapValueType > 8 ? tempValue = DWObject.CapValueString : tempValue = DWObject.CapValue;
-    if (DWObject.CapValueType == EnumDWT_CapValueType.TWTY_BOOL) {
-      tempValue == 0 ? tempValue = 'FALSE' : tempValue = 'TRUE';
-    }
-    //_bzlog('The value type of the CAP_SERIALNUMBER is ' + DWObject.CapValueType);
-    //_bzlog('The type of the CAP_SERIALNUMBER is ' + DWObject.CapType);
-    //_bzlog('The value of the CAP_SERIALNUMBER is ' + tempValue);
-    return tempValue;
-  }
-
-  function Twain_StartScan() {
-    if (Twain_isScanning == true) return;
-    if (Twain_isStopping == true) return;
-
-    if (DWObject && DWObject.SelectSource()) {
-      _bzlog('Twain_StartScan');
-      bSelected = true;
-      Twain_isScanning = true;
-      Twain_batchCounter = 0;
-      Twain_imgBlobQueue = [];
-      DWObject.OpenSource();
-      //DWObject.IfShowUI = true;
-      DWObject.IfShowUI = false;
-      DWObject.IfFeederEnabled = true;
-      DWObject.IfDuplexEnabled = true;
-      DWObject.PixelType = Twain_pixelType;
-      DWObject.Resolution = Twain_resolution;
-      DWObject.IfDisableSourceAfterAcquire = true;
-      DWObject.IfShowFileDialog = false;
-      DWObject.PageSize = Twain_pageSize;
-      DWObject.BufferMemoryLimit = 100;
-      //DWObject.TransferMode = EnumDWT_TransferMode.TWSX_NATIVE;
-      DWObject.TransferMode = EnumDWT_TransferMode.TWSX_MEMORY;
-      DWObject.IfAllowLocalCache = true;
-      //DWObject.JPEGQuality = 65;
-      Twain_hardwareID = Twain_getHardwareID();
-      _bzlog('HwID='+Twain_hardwareID);
-      DWObject.IfAutomaticDeskew = true;
-      DWObject.IfAutoDiscardBlankpages = false;
-      _bzlog("scan options: pt="+Twain_pixelType+",ps="+Twain_pageSize+",rs="+Twain_resolution);
-      DWObject.AcquireImage(Twain_OnAcquireSuccess, Twain_OnAcquireFailure);
-      Twain_stateChangeEvent("started");
-    } else {
-      _bzlog("SelectSource failed!");
-    }
-  }
-
-  function Twain_StopAll() {
-    _bzlog("Twain_StopAll");
-    Twain_isStopping = true;
-    if (DWObject) {
-      DWObject.CloseSource();
-      DWObject.RemoveAllImages();
-      Twain_imgBlobQueue = [];
-    }
-    Twain_isScanning = false;
-    bSelected = false;
-  }
-
-  function Twain_isShuttingDown() {
-    if (Twain_isStopping == true) {
-      _bzlog('Twain_isShuttingDown,true');
-      Twain_isHttpPosting = 0;
-      return true;
-    }
-    return false;
-  }
-
-  function Twain_OnAcquireSuccess() {
-    _bzlog('Twain_OnAcquireSuccess');
-    DWObject.CloseSource();
-    Twain_isScanning = false;
-    bSelected = false;
-  }
-
-  function Twain_OnAcquireFailure(errorCode, errorString) {
-    _bzlog('Twain_OnAcquireFailure');
-    DWObject.CloseSource();
-    Twain_isScanning = false;
-    bSelected = false;
-  }
-
-  function Twain_getSignedUrl(testID) {
-    if (Twain_isShuttingDown() == true) return;
-    $.ajax({
-      async: true,
-      type: 'post',
-      timeout: 10000,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"));
-      },
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      url: 'http://app.jouletek.com:8080/panguanb/scan/start',
-      data: {testID: testID, hwID: Twain_hardwareID},
-      success: function (responseData) {
-        _bzlog("getSignedUrl success,"+Twain_uploadCounter);
-        if (Twain_isShuttingDown() == true) return;
-        serverFileID = responseData.data.serverFileID;
-        _bzlog("serverFileID="+serverFileID);
-        signedUrls = responseData.data.urls;
-        Twain_isHttpPosting++;
-      },
-      error: function (responseData) {
-        _bzlog("getSignedUrl failed,"+Twain_uploadCounter);
-        if (Twain_isShuttingDown() == true) return;
-        Twain_isHttpPosting--;
-        Twain_uploadCounter--;
-      }
-    })
-  }
-
-  function Twain_confirmUpload() {
-    if (Twain_isShuttingDown() == true) return;
-    $.ajax({
-      async: true,
-      timeout: 10000,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"))
-      },
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      data: {testID: examID, id: serverFileID.split("_").pop(), serverFileID: serverFileID},
-      type: 'post',
-      url: 'http://app.jouletek.com:8080/panguanb/upload/confirm/once',
-      success: function (responseData) {
-        _bzlog("confirm success,"+Twain_uploadCounter+","+serverFileID)
-        if (Twain_isShuttingDown() == true) return;
-        Twain_isHttpPosting=0;
-        if (Twain_isScanning==false && Twain_imgBlobQueue.length==0) Twain_stateChangeEvent("upload finished");
-      },
-      error: function (responseData) {
-        _bzlog("confirm failed,"+Twain_uploadCounter+","+serverFileID)
-        if (Twain_isShuttingDown() == true) return;
-        Twain_isHttpPosting--;
-      }
-    })
-  }
-
-  function Twain_uploadToOSS(url) {
-    if (Twain_isShuttingDown() == true) return;
-    let blobBin = Twain_imgBlobQueue[0];
-    $.ajax({
-      async: true,
-      timeout: 20000,
-      headers: {
-        'x-oss-meta-author': 'aliy'
-      },
-      type: "put",
-      url: url,
-      data: blobBin,
-      processData: false,
-      contentType: 'multipart/form-data',
-      success: function (responseData) {
-        _bzlog("upload success,"+Twain_uploadCounter+","+serverFileID);
-        if (Twain_isShuttingDown() == true) return;
-        Twain_imgBlobQueue.shift();
-        Twain_isHttpPosting++;
-      },
-      error: function (responseData) {
-        _bzlog("upload failed,"+Twain_uploadCounter+","+serverFileID);
-        if (Twain_isShuttingDown() == true) return;
-        Twain_isHttpPosting--;
-      }
-    })
-  }
-
-  function Twain_dataURLtoBlob(dataurl) {
-    var arr = dataurl.split(',');
-    var mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
-    // _bzlog("arr[0]====" + JSON.stringify(arr[0]));//   "data:image/png;base64"
-    // _bzlog("arr[0].match(/:(.*?);/)====" + arr[0].match(/:(.*?);/));// :image/png;,image/png
-    // _bzlog("arr[0].match(/:(.*?);/)[1]====" + arr[0].match(/:(.*?);/)[1]);//   image/png
-    var bstr = atob(arr[1].replace(/\s/g, ''));
-    var n = bstr.length;
-    var u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr]);//值，类型
-  }
-
-  function Twain_UploadProcessor()
-  {
-    switch (Twain_isHttpPosting) {
-      case 0:
-        if (Twain_isStopping == true) {
-          Twain_isStopping = false;
-          Twain_stateChangeEvent("stopped");
-        } else {
-          if (Twain_imgBlobQueue.length >= 2) {
-            Twain_isHttpPosting = 1;
-            Twain_uploadCounter++;
-            Twain_getSignedUrl(examID);
-          }
+    function _bzlog(s) {
+        if (isLogEnabled)
+        {
+            let d = new Date();
+            let datestring = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) +
+                " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2)
+                + "," + ("0" + d.getMilliseconds()).slice(-3) + ",";
+            console.log(datestring + s);
         }
-        break;
-      case 2:
-        Twain_isHttpPosting = 3;
-        Twain_uploadToOSS(signedUrls[0]);
-        break;
-      case 4:
-        Twain_isHttpPosting = 5;
-        Twain_uploadToOSS(signedUrls[1]);
-        break;
-      case 6:
-        Twain_isHttpPosting = 7;
-        Twain_confirmUpload();
-        break;
     }
-    setTimeout(Twain_UploadProcessor,Twain_timerInterval);
-  }
+
+    var examID;
+
+    var Ctx_serverFileID=['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'];
+    var Ctx_signedUrls=[['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],
+        ['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-']];
+    var Ctx_isHttpPosting = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var Ctx_imgBlobBuffer = [['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],
+        ['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-'],['-','-']];
+    var Ctx_context = [$("#twainThreadContext0"), $("#twainThreadContext1"),$("#twainThreadContext2"), $("#twainThreadContext3"),
+        $("#twainThreadContext4"), $("#twainThreadContext5"),$("#twainThreadContext6"), $("#twainThreadContext7"),
+        $("#twainThreadContext8"), $("#twainThreadContext9"),$("#twainThreadContext10"), $("#twainThreadContext11"),
+        $("#twainThreadContext12"), $("#twainThreadContext13"),$("#twainThreadContext14"), $("#twainThreadContext15"),
+    ];
+    var Ctx_isStopping = [false,false,false,false,false,false,false,false,
+        false,false,false,false,false,false,false,false];
+    var Ctx_uploadCounter = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+    var Twain_isStopping = false;
+    var Twain_isScanning = false;
+    var Twain_isUploading = false;
+    var Twain_timerInterval = 20;
+    var Twain_maxThreads = 8; // <=16
+    var Twain_httpTimeout_OSS = 8000;
+    var Twain_httpTimeout_JT = 3000;
+
+    var DWObject;
+    var Twain_batchCounter = 0;
+    var Twain_scanCounter = 0;
+    var Twain_uploadIndex = 0;
+    var Twain_uploadCounter = 0;
+    var Twain_imgBlobQueue = [];
+    var Twain_hardwareID = 'unknown';
+    var Twain_defaultPixelType = EnumDWT_PixelType.TWPT_GRAY;
+    var Twain_defaultPageSize = EnumDWT_CapSupportedSizes.TWSS_A4;
+    var Twain_defaultResolution = 200;
+    var Twain_pixelType = Twain_defaultPixelType;
+    var Twain_pageSize = Twain_defaultPageSize;
+    var Twain_resolution = Twain_defaultResolution;
+
+    function Twain_stateChangeEvent(e)
+    {
+        if (e=="upload finished") {
+            sessionStorage.setItem("isScanDone", 1);
+        } else if (e=="started") {
+            sessionStorage.setItem("isScanDone", 0);
+        }
+        _bzlog("stateChangeEvent:"+e);
+    }
+
+    function OnScanButtonClick() {
+        examID = sessionStorage.getItem("examID");
+        Twain_StartScan();
+    }
+
+    Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', Twain_OnReady);
+
+    function Twain_OnReady() {
+        DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+        if (DWObject) {
+            DWObject.IfUseTwainDSM = true;
+            DWObject.Width = 0;
+            DWObject.Height = 0;
+            DWObject.RegisterEvent("OnPostTransfer", Twain_OnPostTransfer);
+            DWObject.RegisterEvent("OnPostAllTransfers", Twain_OnPostAllTransfers);
+            setTimeout(Twain_UploadProcessor,Twain_timerInterval);
+            _bzlog('scanNew v5.1 started');
+        }
+    }
+
+    function Twain_OnPostTransfer() {
+        Twain_batchCounter++;
+        Twain_scanCounter++;
+        DWObject.SelectedImagesCount = 1;
+        DWObject.SetSelectedImageIndex(0, 0);
+        DWObject.GetSelectedImagesSize(EnumDWT_ImageType.IT_JPG);
+        let imgStr = DWObject.SaveSelectedImagesToBase64Binary();
+        let blobBin = Twain_dataURLtoBlob('data:image/jpg;base64,' + imgStr);
+        Twain_imgBlobQueue.push(blobBin);
+        DWObject.RemoveImage(0);
+        _bzlog('Twain_OnPostTransfer:'+DWObject.HowManyImagesInBuffer+','+Twain_imgBlobQueue.length+','+Twain_batchCounter+','+Twain_scanCounter);
+    }
+
+    function Twain_OnPostAllTransfers() {
+        _bzlog('Twain_OnPostAllTransfers');
+        if (Twain_batchCounter % 2 !== 0) {
+            Twain_imgBlobQueue = [];
+            alert("Error 1");
+        }
+    }
+
+    function Twain_getHardwareID() {
+        DWObject.Capability = EnumDWT_Cap.CAP_SERIALNUMBER;
+        DWObject.CapGet();
+        var tempValue = 'unknown';
+        DWObject.CapValueType > 8 ? tempValue = DWObject.CapValueString : tempValue = DWObject.CapValue;
+        if (DWObject.CapValueType == EnumDWT_CapValueType.TWTY_BOOL) {
+            tempValue == 0 ? tempValue = 'FALSE' : tempValue = 'TRUE';
+        }
+        //_bzlog('The value type of the CAP_SERIALNUMBER is ' + DWObject.CapValueType);
+        //_bzlog('The type of the CAP_SERIALNUMBER is ' + DWObject.CapType);
+        //_bzlog('The value of the CAP_SERIALNUMBER is ' + tempValue);
+        return tempValue;
+    }
+
+    function Twain_StartScan() {
+        if (Twain_isScanning == true) return;
+        if (Twain_isStopping == true) return;
+
+        if (DWObject && DWObject.SelectSource()) {
+            _bzlog('Twain_StartScan');
+            bSelected = true;
+            Twain_isScanning = true;
+            Twain_batchCounter = 0;
+            DWObject.OpenSource();
+            DWObject.IfShowUI = isDebug;
+            DWObject.IfFeederEnabled = true;
+            DWObject.IfDuplexEnabled = true;
+            DWObject.PixelType = Twain_pixelType;
+            DWObject.Resolution = Twain_resolution;
+            DWObject.IfDisableSourceAfterAcquire = true;
+            DWObject.IfShowFileDialog = false;
+            DWObject.PageSize = Twain_pageSize;
+            DWObject.BufferMemoryLimit = 100;
+            DWObject.TransferMode = EnumDWT_TransferMode.TWSX_NATIVE;
+            DWObject.IfAllowLocalCache = true;
+            //DWObject.JPEGQuality = 65;
+            Twain_hardwareID = Twain_getHardwareID();
+            _bzlog('HwID='+Twain_hardwareID);
+            DWObject.IfAutomaticDeskew = true;
+            DWObject.IfAutoDiscardBlankpages = false;
+            _bzlog("scan options: pt="+Twain_pixelType+",ps="+Twain_pageSize+",rs="+Twain_resolution);
+            DWObject.AcquireImage(Twain_OnAcquireSuccess, Twain_OnAcquireFailure);
+            Twain_stateChangeEvent("started");
+        } else {
+            _bzlog("SelectSource failed!");
+        }
+    }
+
+    function Twain_StopAll() {
+        _bzlog("Twain_StopAll");
+        Twain_isStopping = true;
+        for (_x=0;_x<Twain_maxThreads;_x++) Ctx_isStopping[_x]=true;
+        if (DWObject) {
+            DWObject.CloseSource();
+            DWObject.RemoveAllImages();
+            Twain_imgBlobQueue = [];
+        }
+        Twain_isScanning = false;
+        bSelected = false;
+    }
+
+    function Twain_isShuttingDown(tid) {
+        if (Twain_isStopping == true) {
+            _bzlog("["+tid+"] Twain_isShuttingDown,true");
+            Ctx_isHttpPosting[tid] = 0;
+            return true;
+        }
+        return false;
+    }
+
+    function Twain_OnAcquireSuccess() {
+        _bzlog('Twain_OnAcquireSuccess');
+        DWObject.CloseSource();
+        Twain_isScanning = false;
+        bSelected = false;
+    }
+
+    function Twain_OnAcquireFailure(errorCode, errorString) {
+        _bzlog('Twain_OnAcquireFailure');
+        DWObject.CloseSource();
+        Twain_isScanning = false;
+        bSelected = false;
+    }
+
+    function Twain_getSignedUrl(threadContext,testID) {
+        let tid = Twain_getTID(threadContext);
+        if (Twain_isShuttingDown(tid) == true) return;
+        $.ajax({
+            async: true,
+            type: 'post',
+            context: threadContext,
+            timeout: Twain_httpTimeout_JT,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"));
+            },
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            url: 'http://app.jouletek.com:8080/panguanb/scan/start',
+            data: {testID: testID, hwID: Twain_hardwareID},
+            success: function (responseData) {
+                let tid = Twain_getTID($(this));
+                _bzlog("["+tid+"] getSignedUrl success,"+Ctx_uploadCounter[tid]);
+                if (Twain_isShuttingDown(tid) == true) return;
+                Ctx_serverFileID[tid] = responseData.data.serverFileID;
+                _bzlog("["+tid+"] serverFileID="+Ctx_serverFileID[tid]);
+                Ctx_signedUrls[tid] = responseData.data.urls;
+                Ctx_isHttpPosting[tid]++;
+            },
+            error: function (responseData) {
+                let tid = Twain_getTID($(this));
+                _bzlog("["+tid+"] getSignedUrl failed,"+Ctx_uploadCounter[tid]);
+                if (Twain_isShuttingDown(tid) == true) return;
+                Ctx_isHttpPosting[tid]--;
+            }
+        })
+    }
+
+    function Twain_confirmUpload(threadContext) {
+        let tid = Twain_getTID(threadContext);
+        if (Twain_isShuttingDown(tid) == true) return;
+        $.ajax({
+            async: true,
+            type: 'post',
+            context: threadContext,
+            timeout: Twain_httpTimeout_JT,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", sessionStorage.getItem("userToken"))
+            },
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            data: {testID: examID, id: Ctx_serverFileID[tid].split("_").pop(), serverFileID: Ctx_serverFileID[tid]},
+            url: 'http://app.jouletek.com:8080/panguanb/upload/confirm/once',
+            success: function (responseData) {
+                let tid = Twain_getTID($(this));
+                Twain_uploadCounter++;
+                _bzlog("["+tid+"] confirm success,"+Ctx_uploadCounter[tid]+","+Twain_uploadCounter+","+Ctx_serverFileID[tid]);
+                if (Twain_isShuttingDown(tid) == true) return;
+                Ctx_isHttpPosting[tid]=0;
+            },
+            error: function (responseData) {
+                let tid = Twain_getTID($(this));
+                _bzlog("["+tid+"] confirm failed,"+Ctx_uploadCounter[tid]+","+Ctx_serverFileID[tid]);
+                if (Twain_isShuttingDown(tid) == true) return;
+                Ctx_isHttpPosting[tid]--;
+            }
+        })
+    }
+
+    function Twain_uploadToOSS(threadContext,url,blobBin) {
+        let tid = Twain_getTID(threadContext);
+        if (Twain_isShuttingDown(tid) == true) return;
+        $.ajax({
+            async: true,
+            context:threadContext,
+            timeout: Twain_httpTimeout_OSS,
+            headers: {
+                'x-oss-meta-author': 'aliy'
+            },
+            type: "put",
+            url: url,
+            data: blobBin,
+            processData: false,
+            contentType: 'multipart/form-data',
+            success: function (responseData) {
+                let tid = Twain_getTID($(this));
+                _bzlog("["+tid+"] upload success,"+Ctx_uploadCounter[tid]+","+Ctx_serverFileID[tid]);
+                if (Twain_isShuttingDown(tid) == true) return;
+                Ctx_isHttpPosting[tid]++;
+            },
+            error: function (responseData) {
+                let tid = Twain_getTID($(this));
+                _bzlog("["+tid+"] upload failed,"+Ctx_uploadCounter[tid]+","+Ctx_serverFileID[tid]);
+                if (Twain_isShuttingDown(tid) == true) return;
+                Ctx_isHttpPosting[tid]--;
+            }
+        })
+    }
+
+    function Twain_dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(',');
+        var mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
+        // _bzlog("arr[0]====" + JSON.stringify(arr[0]));//   "data:image/png;base64"
+        // _bzlog("arr[0].match(/:(.*?);/)====" + arr[0].match(/:(.*?);/));// :image/png;,image/png
+        // _bzlog("arr[0].match(/:(.*?);/)[1]====" + arr[0].match(/:(.*?);/)[1]);//   image/png
+        var bstr = atob(arr[1].replace(/\s/g, ''));
+        var n = bstr.length;
+        var u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr]);//值，类型
+    }
+
+    function Twain_UploadProcessor()
+    {
+        let tid=0;
+        for (tid=0;tid<Twain_maxThreads;tid++) {
+            switch (Ctx_isHttpPosting[tid]) {
+                case 0:
+                    if (Twain_isStopping == true) {
+                        if (Ctx_isStopping[tid] == true) {
+                            Ctx_isStopping[tid] = false;
+                            let _fin = true;
+                            for (_x=0;_x<Twain_maxThreads;_x++) if (Ctx_isStopping[_x]==true) {
+                                _fin = false;
+                                break;
+                            }
+                            if (_fin==true) {
+                                Twain_isStopping = false;
+                                Twain_uploadIndex = 0;
+                                Twain_uploadCounter = 0;
+                                Twain_stateChangeEvent("stopped");
+                            }
+                        }
+                    } else {
+                        if (Twain_isScanning==false && Twain_imgBlobQueue.length==0 && Twain_isUploading==true && Twain_uploadCounter==Twain_uploadIndex) {
+                            Twain_isUploading = false;
+                            Twain_stateChangeEvent("upload finished");
+                        } else if (Twain_imgBlobQueue.length >= 2) {
+                            Twain_isUploading = true;
+                            Ctx_imgBlobBuffer[tid][0] = Twain_imgBlobQueue[0];
+                            Ctx_imgBlobBuffer[tid][1] = Twain_imgBlobQueue[1];
+                            Twain_imgBlobQueue.shift();
+                            Twain_imgBlobQueue.shift();
+                            Twain_uploadIndex++;
+                            Ctx_uploadCounter[tid]=Twain_uploadIndex;
+                            Ctx_isHttpPosting[tid]++;
+                        }
+                    }
+                    break;
+                case 1:
+                    Ctx_isHttpPosting[tid]++;
+                    Twain_getSignedUrl(Ctx_context[tid], examID);
+                    break;
+                case 3:
+                    Ctx_isHttpPosting[tid]++;
+                    Twain_uploadToOSS(Ctx_context[tid], Ctx_signedUrls[tid][0], Ctx_imgBlobBuffer[tid][0]);
+                    break;
+                case 5:
+                    Ctx_isHttpPosting[tid]++;
+                    Twain_uploadToOSS(Ctx_context[tid], Ctx_signedUrls[tid][1], Ctx_imgBlobBuffer[tid][1]);
+                    break;
+                case 7:
+                    Ctx_isHttpPosting[tid]++;
+                    Twain_confirmUpload(Ctx_context[tid]);
+                    break;
+            }
+        }
+        setTimeout(Twain_UploadProcessor,Twain_timerInterval);
+    }
+
+    function Twain_getTID(threadContext)
+    {
+        let ctxStr = threadContext.get(0).id;
+        return Number(ctxStr.substr(18));
+    }
 
 </script>
 </body>

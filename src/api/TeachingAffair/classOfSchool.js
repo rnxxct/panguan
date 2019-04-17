@@ -10,6 +10,13 @@ export function getList(query) {
     data:QS.stringify(query)
   })
 }
+export function getGradeClass(query) {
+    return request({
+        url:'/class/grade/list',
+        method:'post',
+        data:QS.stringify(query)
+    })
+}
 export function addClass(query) {
   return request({
     url:'/class/add',

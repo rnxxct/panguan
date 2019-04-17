@@ -7,6 +7,7 @@
     </div>
   </div>
 </template>
+
 <script>
   import theme from 'echarts/theme/macarons.js'
   import {getData} from '@/api/scoreAnalysis/classesComparison'
@@ -28,7 +29,6 @@
     created(){
       this.listQuery.testID = this.$route.params.testID
       this.init()
-
     },
     methods: {
       init(){
@@ -50,6 +50,7 @@
 */
       var bar = this.$refs.bar
       /*绘制*/
+          console.log(this.$refs.bar)
       if (bar){
         let  mybar=this.$echarts.init(bar,'macarons')
         mybar.setOption({
@@ -102,7 +103,6 @@
             {
               name:'平均分',
               type:'line',
-              // barWidth : 60,
               data:this.average,
               markPoint : {
                 data : [
@@ -127,7 +127,6 @@
             {
               name:'最高分',
               type:'line',
-              // barWidth : 60,
               data:this.maxScore,
               markPoint : {
                 data : [
@@ -213,7 +212,7 @@
                   name:'及格率(60%)',
                   type:'line',
                   data:this.pass,
-                  barWidth : 60,
+                  // barWidth : 60,
                   markPoint : {
                     data : [
                       {type : 'max', name: '最大值'},

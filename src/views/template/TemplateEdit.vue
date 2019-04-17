@@ -129,13 +129,15 @@
         }),
         getTemplate({templateID:this.templateID}).then(response=>{
             this.editForm = response.data
+            this.editForm.urls = []
         })
       },
       submitUpload() {
-        if (this.fileList.length == 0){
-          this.editForm.urls =','
-          this.requestUrl()
-        }
+          console.log(this.fileList)
+        // if (this.fileList.length == 0){
+        //   this.editForm.urls =','
+        //   this.requestUrl()
+        // }
         this.$refs.upload.submit();
       },
       handleRemove(file, fileList) {
@@ -146,6 +148,7 @@
       },
       beforeUpload(file){
         //jquery发送同步请求
+          console.log("before")
         this.nums = this.fileNames.length
         /*  this.editForm.filesName = this.fileNames.toString()
          templateAdd(this.editForm).then(response => {
@@ -157,12 +160,16 @@
 
       },
       handleChange(file, fileList){
+          console.log("change")
+          console.log(fileList.length)
         this.fileNames = [];
         for (let i = 0; i < fileList.length; i++) {
           this.fileNames.push(fileList[i].name)
         }
+        console.log(this.fileNames)
       },
       requestUrl(){
+          console.log("shanghcuan"+this.editForm.urls)
         this.editForm.filesName = this.fileNames.toString()
         this.editForm.templateID = this.templateID
         templateUpdate(this.editForm,).then(response => {
@@ -217,10 +224,19 @@
             vthis.percentage = percentage
           }
         }).then((results) => {
-          that.editForm.urls.push(results.url);
+            console.log("nums"+that.nums)
+            console.log("得到url"+results.url)
+          // vthis.editForm.urls.push("111");
+            console.log("nums"+that.nums)
+            console.log(that.editForm)
+            console.log(that.editForm.urls)
           that.nums = that.nums - 1;
+            that.editForm.urls.push(results.url)
+
+            console.log("numsss"+that.nums)
           if (that.nums <= 0) {
             that.editForm.urls = that.editForm.urls.toString()
+              console.log("上传")
             that.requestUrl()
           }
         }).catch((err) => {

@@ -31,6 +31,13 @@ export function updateStudent(query) {
     data:QS.stringify(query)
   })
 }
+export function changeStudentClass(query) {
+    return request({
+        url:'/studentclass/change',
+        method:'post',
+        data:QS.stringify(query)
+    })
+}
 export function importStudents(query) {
   return request({
     url:"/studentOfClass/batchAdd",

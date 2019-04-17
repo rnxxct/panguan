@@ -44,7 +44,7 @@
                     @current-change="handleCurrentChange"/>
             </div>
         </div>
-        <el-dialog width="55%" :visible.sync="isShow">
+        <el-dialog width="100%" :visible.sync="isShow" id="PicContainer">
             <div style="color: gray;font-family: STHeiti;font-size: 20px;">{{currentServerFileID}}</div>
             <template>
                 <div style="display: inline-block; width: 49%;">
@@ -133,6 +133,7 @@
         },
         data() {
             return {
+                width: '100%',
                 radio: 0,
                 imgIndex: 0,/*多张纸的时候，现在为第几张纸的index*/
                 picSize: 2,
@@ -344,6 +345,7 @@
                             if (that.$refs.picheight[0].complete && that.$refs.picheight[1].complete && that.$refs.picheight[2].complete && that.$refs.picheight[3].complete) {
                                 that.imgHeight = that.$refs.picheight[0].height
                                 that.imgWidth = that.$refs.picheight[0].width
+                                console.log(that.imgWidth)
                                 my_canvas1 = that.$refs.canvas1[0]
                                 my_canvas3 = that.$refs.canvas1[1]
                                 my_canvas2 = that.$refs.canvas2[0]
@@ -380,6 +382,8 @@
                             if (that.$refs.picheight[0].complete && that.$refs.picheight[1].complete) {
                                 that.imgHeight = that.$refs.picheight[0].height
                                 that.imgWidth = that.$refs.picheight[0].width
+                                console.log(that.imgWidth)
+                                console.log(that.imgHeight)
                                 my_canvas1 = that.$refs.canvas1[0]
                                 my_canvas2 = that.$refs.canvas2[0]
                                 that.$refs.canvas1[0].height = that.imgHeight
@@ -484,15 +488,15 @@
                     let currentWidth = (data.points[i].br_x - data.points[i].tl_x) * ratio
                     let currentHeight = (data.points[i].br_y - data.points[i].tl_y) * ratio
                     if (data.points[i].filled == 1 && (data.points[i].sheetNum == num || data.points[i].sheetNum == num.toString())) {
-                        this.drawAnswer(currentCtx, x - 1, y - 1, currentWidth + 2, currentHeight + 2, 2)
+                        this.drawAnswer(data.points[i].color, currentCtx, x - 1, y - 1, currentWidth + 2, currentHeight + 2, 2)
                     }
                 }
             },
-            drawAnswer(currentCtx, x, y, width, height, linewidth) {
+            drawAnswer(color, currentCtx, x, y, width, height, linewidth) {
                 currentCtx.beginPath();
-                currentCtx.fillStyle = 'red'
+                currentCtx.fillStyle = color
                 currentCtx.lineWidth = linewidth
-                currentCtx.strokeStyle = 'red'
+                currentCtx.strokeStyle = color
                 currentCtx.rect(x, y, width, height)
                 currentCtx.stroke();
             },
@@ -518,19 +522,25 @@
                 for (let i = 0; i < data.subjects.length; i++) {
                     let x = data.subjects[i].tl_x
                     let y = data.subjects[i].tl_y
+                    let color = '';
+                    if (data.subjects[i].test_score == 'T') {
+                        color = 'green';
+                    } else {
+                        color = 'red';
+                    }
                     let width = data.subjects[i].br_x - data.subjects[i].tl_x;
                     let height = data.subjects[i].br_y - data.subjects[i].tl_y;
                     if (data.subjects[i].sheetNum == num.toString() || data.subjects[i].sheetNum == num) {
                         if (x < data.width / 2) {
-                            this.drawSubjectNumber(currentCtx, (parseFloat(x) + 1.0 * parseFloat(width)) * ratio, (parseFloat(y) + parseFloat(height)) * ratio, width * ratio, height * ratio, data.subjects[i].test_score)
+                            this.drawSubjectNumber(color, currentCtx, (parseFloat(x) + 1.0 * parseFloat(width)) * ratio, (parseFloat(y) + parseFloat(height)) * ratio, width * ratio, height * ratio, data.subjects[i].test_score)
                         } else {
-                            this.drawSubjectNumber(currentCtx, (parseFloat(x) - 1.0 * parseFloat(width)) * ratio, (parseFloat(y) + parseFloat(height)) * ratio, width * ratio, height * ratio, data.subjects[i].test_score)
+                            this.drawSubjectNumber(color, currentCtx, (parseFloat(x) - 1.0 * parseFloat(width)) * ratio, (parseFloat(y) + parseFloat(height)) * ratio, width * ratio, height * ratio, data.subjects[i].test_score)
                         }
                     }
                 }
             },
-            drawSubjectNumber(ctxCurrent, x, y, width, height, text) {
-                ctxCurrent.fillStyle = 'red'
+            drawSubjectNumber(color, ctxCurrent, x, y, width, height, text) {
+                ctxCurrent.fillStyle = color
                 ctxCurrent.font = '25px solid 黑体'
                 ctxCurrent.textAlign = 'center'
                 ctxCurrent.fillText(text, x, y)

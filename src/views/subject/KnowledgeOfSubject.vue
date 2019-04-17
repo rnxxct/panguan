@@ -1,6 +1,6 @@
 <template>
   <div class="custom-tree-container">
-    <div class="block" style="width: 30%;margin: 0 auto">
+    <div class="block" style="width: 60%;margin: 0 auto">
       <el-tree
         :data="data3"
         show-checkbox

@@ -27,30 +27,71 @@
       </el-button>
       <el-table :data="tableData" :border=true @sort-change="changeTableSort" stripe
                 style="width:100%; margin: auto">
-        <!--@sort-change="changeTableSort" @filter-change="filterChange"-->
-        <!-- <el-table-column align="center" column-key="id" sortable="custom" :filters="classes" prop="className"
-                          label="班级"></el-table-column>
-         <el-table-column align="center" column-key="id" sortable="custom" prop="studentNumber"
-                          label="应考人数"></el-table-column>-->
         <el-table-column align="center" prop="className" sortable="custom" label="班级"></el-table-column>
         <el-table-column align="center" prop="subjectName" label="学科"></el-table-column>
         <el-table-column align="center" prop="teacherName" label="教师"></el-table-column>
         <el-table-column align="center" prop="studentCount" label="应考人数"></el-table-column>
         <el-table-column align="center" prop="actualStudentCount" label="实考人数"></el-table-column>
         <el-table-column align="center" prop="average" sortable="custom" label="平均分"></el-table-column>
-        <!--<el-table-column align="center" prop="averageRank" label="名次"></el-table-column>-->
         <el-table-column align="center" prop="passRate" sortable="custom" label="及格率"></el-table-column>
-        <!--<el-table-column align="center" prop="passRateRank" label="名次"></el-table-column>-->
         <el-table-column align="center" prop="excellentRate" sortable="custom" label="优秀率"></el-table-column>
-        <!--<el-table-column align="center" prop="excellentRateRank" label="名次"></el-table-column>-->
-
-        <!--<el-table-column align="center">-->
-        <!--<template slot-scope="scope">-->
-        <!--<el-button type="primary" @click.native="handleCheck(scope.$index,scope.row)" style="float: left">查看-->
-        <!--</el-button>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
       </el-table>
+        <el-table v-if="this.tableData1.length > 0" :data="tableData1" :border=true @sort-change="changeTableSort1" stripe
+                  style="width:100%; margin: auto">
+            <el-table-column align="center" prop="className" sortable="custom" label="班级"></el-table-column>
+            <el-table-column align="center" prop="subjectName" label="学科"></el-table-column>
+            <el-table-column align="center" prop="teacherName" label="教师"></el-table-column>
+            <el-table-column align="center" prop="studentCount" label="应考人数"></el-table-column>
+            <el-table-column align="center" prop="actualStudentCount" label="实考人数"></el-table-column>
+            <el-table-column align="center" prop="average" sortable="custom" label="平均分"></el-table-column>
+            <el-table-column align="center" prop="passRate" sortable="custom" label="及格率"></el-table-column>
+            <el-table-column align="center" prop="excellentRate" sortable="custom" label="优秀率"></el-table-column>
+        </el-table>
+        <el-table v-if="this.tableData2.length > 0" :data="tableData2" :border=true @sort-change="changeTableSort2" stripe
+                  style="width:100%; margin: auto">
+            <el-table-column align="center" prop="className" sortable="custom" label="班级"></el-table-column>
+            <el-table-column align="center" prop="subjectName" label="学科"></el-table-column>
+            <el-table-column align="center" prop="teacherName" label="教师"></el-table-column>
+            <el-table-column align="center" prop="studentCount" label="应考人数"></el-table-column>
+            <el-table-column align="center" prop="actualStudentCount" label="实考人数"></el-table-column>
+            <el-table-column align="center" prop="average" sortable="custom" label="平均分"></el-table-column>
+            <el-table-column align="center" prop="passRate" sortable="custom" label="及格率"></el-table-column>
+            <el-table-column align="center" prop="excellentRate" sortable="custom" label="优秀率"></el-table-column>
+        </el-table>
+        <el-table v-if="this.tableData3.length > 0" :data="tableData3" :border=true @sort-change="changeTableSort3" stripe
+                  style="width:100%; margin: auto">
+            <el-table-column align="center" prop="className" sortable="custom" label="班级"></el-table-column>
+            <el-table-column align="center" prop="subjectName" label="学科"></el-table-column>
+            <el-table-column align="center" prop="teacherName" label="教师"></el-table-column>
+            <el-table-column align="center" prop="studentCount" label="应考人数"></el-table-column>
+            <el-table-column align="center" prop="actualStudentCount" label="实考人数"></el-table-column>
+            <el-table-column align="center" prop="average" sortable="custom" label="平均分"></el-table-column>
+            <el-table-column align="center" prop="passRate" sortable="custom" label="及格率"></el-table-column>
+            <el-table-column align="center" prop="excellentRate" sortable="custom" label="优秀率"></el-table-column>
+        </el-table>
+        <el-table v-if="this.tableData4.length > 0" :data="tableData4" :border=true @sort-change="changeTableSort4" stripe
+                  style="width:100%; margin: auto">
+            <el-table-column align="center" prop="className" sortable="custom" label="班级"></el-table-column>
+            <el-table-column align="center" prop="subjectName" label="学科"></el-table-column>
+            <el-table-column align="center" prop="teacherName" label="教师"></el-table-column>
+            <el-table-column align="center" prop="studentCount" label="应考人数"></el-table-column>
+            <el-table-column align="center" prop="actualStudentCount" label="实考人数"></el-table-column>
+            <el-table-column align="center" prop="average" sortable="custom" label="平均分"></el-table-column>
+            <el-table-column align="center" prop="passRate" sortable="custom" label="及格率"></el-table-column>
+            <el-table-column align="center" prop="excellentRate" sortable="custom" label="优秀率"></el-table-column>
+        </el-table>
+        <el-table v-if="this.tableData5.length > 0" :data="tableData5" :border=true @sort-change="changeTableSort5" stripe
+                  style="width:100%; margin: auto">
+            <el-table-column align="center" prop="className" sortable="custom" label="班级"></el-table-column>
+            <el-table-column align="center" prop="subjectName" label="学科"></el-table-column>
+            <el-table-column align="center" prop="teacherName" label="教师"></el-table-column>
+            <el-table-column align="center" prop="studentCount" label="应考人数"></el-table-column>
+            <el-table-column align="center" prop="actualStudentCount" label="实考人数"></el-table-column>
+            <el-table-column align="center" prop="average" sortable="custom" label="平均分"></el-table-column>
+            <el-table-column align="center" prop="passRate" sortable="custom" label="及格率"></el-table-column>
+            <el-table-column align="center" prop="excellentRate" sortable="custom" label="优秀率"></el-table-column>
+        </el-table>
+
       <!--<div class="pagination-container">-->
       <!--<el-pagination-->
       <!--:current-page="listQuery.pageNum"-->
@@ -123,6 +164,34 @@
   import ElInput from "../../../node_modules/element-ui/packages/input/src/input";
   import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
 
+  function compare(prop) {
+      return function (obj1, obj2) {
+          var val1 = obj1[prop];
+          var val2 = obj2[prop];
+          if (val1 < val2) {
+              return -1;
+          } else if (val1 > val2) {
+              return 1;
+          } else {
+              return 0;
+          }
+      }
+  }
+
+  function comparedesc(prop) {
+      return function (obj1, obj2) {
+          var val1 = obj1[prop];
+          var val2 = obj2[prop];
+          if (val1 > val2) {
+              return -1;
+          } else if (val1 < val2) {
+              return 1;
+          } else {
+              return 0;
+          }
+      }
+  }
+
   export default {
     components: {
       ElButton,
@@ -167,6 +236,11 @@
         currentClasses: '0',
         fileName: '',
         tableData: [],
+          tableData1: [],
+          tableData2: [],
+          tableData3: [],
+          tableData4: [],
+          tableData5: [],
         total: 0,
         listQuery: {
           multiTestID: 0,
@@ -223,47 +297,133 @@
       initTable() {
         if (this.listQuery)
           getGradeAnalysisListNew(this.listQuery).then(response => {
-            this.tableData = response.data;
+              console.log( this.listQuery.subjectID)
+              if (this.listQuery.subjectID == 0){
+                  this.tableData= []
+                      this.tableData1 = []
+                      this.tableData2 = []
+                      this.tableData3 = []
+                      this.tableData4 = []
+                      this.tableData5 = []
+                  for (let i = 0; i < response.data.length; i++) {
+                      console.log("i="+i)
+                      console.log("subject"+response.data[i].subjectName)
+                      switch (response.data[i].subjectName) {
+                          case '语文': this.tableData.push(response.data[i])
+                              break;
+                          case '数学': this.tableData1.push(response.data[i])
+                              break;
+                          case '英语': this.tableData2.push(response.data[i])
+                              break;
+                          case '生物': this.tableData3.push(response.data[i])
+                              break;
+                          case '物理': this.tableData4.push(response.data[i])
+                              break;
+                          case '化学': this.tableData5.push(response.data[i])
+                              break;
+                          case '政治': this.tableData3.push(response.data[i])
+                              break;
+                          case '地理': this.tableData4.push(response.data[i])
+                              break;
+                          case '历史': this.tableData5.push(response.data[i])
+                              break;
+                      }
+                  } 
+              } else {
+                  this.tableData = response.data;
+                  this.tableData1 = []
+                  this.tableData2 = []
+                  this.tableData3 = []
+                  this.tableData4 = []
+                  this.tableData5 = []
+              }
           })
       },
       handleGet() {
         getGradeAnalysisListNew(this.listQuery).then(response => {
-          this.tableData = response.data;
+            if (this.listQuery.subjectID == 0){
+                this.tableData= [];
+                    this.tableData1 = [];
+                    this.tableData2 = []
+                    this.tableData3 = []
+                    this.tableData4 = []
+                    this.tableData5 = []
+                for (let i = 0; i < response.data.length; i++) {
+                    console.log("i="+i)
+                    console.log("subject"+response.data[i].subjectName)
+                    switch (response.data[i].subjectName) {
+                        case '语文': this.tableData.push(response.data[i])
+                            break;
+                        case '数学': this.tableData1.push(response.data[i])
+                            break;
+                        case '英语': this.tableData2.push(response.data[i])
+                            break;
+                        case '生物': this.tableData3.push(response.data[i])
+                            break;
+                        case '物理': this.tableData4.push(response.data[i])
+                            break;
+                        case '化学': this.tableData5.push(response.data[i])
+                            break;
+                        case '政治': this.tableData3.push(response.data[i])
+                            break;
+                        case '地理': this.tableData4.push(response.data[i])
+                            break;
+                        case '历史': this.tableData5.push(response.data[i])
+                            break;
+                    }
+                }
+            } else {
+                this.tableData = response.data;
+                this.tableData1 = []
+                this.tableData2 = []
+                this.tableData3 = []
+                this.tableData4 = []
+                this.tableData5 = []
+            }
         })
       },
       changeTableSort(param) {
-        var compare = function (prop) {
-          return function (obj1, obj2) {
-            var val1 = obj1[prop];
-            var val2 = obj2[prop];
-            if (val1 < val2) {
-              return -1;
-            } else if (val1 > val2) {
-              return 1;
-            } else {
-              return 0;
-            }
-          }
-        }
-        var comparedesc = function (prop) {
-          return function (obj1, obj2) {
-            var val1 = obj1[prop];
-            var val2 = obj2[prop];
-            if (val1 > val2) {
-              return -1;
-            } else if (val1 < val2) {
-              return 1;
-            } else {
-              return 0;
-            }
-          }
-        }
         if (param.order == 'ascending') {
           this.tableData.sort(compare(param.prop))
         } else {
           this.tableData.sort(comparedesc(param.prop))
         }
       },
+        changeTableSort1(param) {
+            if (param.order == 'ascending') {
+                this.tableData1.sort(compare(param.prop))
+            } else {
+                this.tableData1.sort(comparedesc(param.prop))
+            }
+        },
+        changeTableSort2(param) {
+            if (param.order == 'ascending') {
+                this.tableData2.sort(compare(param.prop))
+            } else {
+                this.tableData2.sort(comparedesc(param.prop))
+            }
+        },
+        changeTableSort3(param) {
+            if (param.order == 'ascending') {
+                this.tableData3.sort(compare(param.prop))
+            } else {
+                this.tableData3.sort(comparedesc(param.prop))
+            }
+        },
+        changeTableSort4(param) {
+            if (param.order == 'ascending') {
+                this.tableData4.sort(compare(param.prop))
+            } else {
+                this.tableData4.sort(comparedesc(param.prop))
+            }
+        },
+        changeTableSort5(param) {
+            if (param.order == 'ascending') {
+                this.tableData5.sort(compare(param.prop))
+            } else {
+                this.tableData5.sort(comparedesc(param.prop))
+            }
+        },
       /*  handleSizeChange(val) {
           this.listQuery.pageSize = val
           this.initTable()

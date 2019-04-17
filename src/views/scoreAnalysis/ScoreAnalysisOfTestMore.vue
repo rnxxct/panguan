@@ -50,7 +50,7 @@
           v-if="total!=0"/>
       </div>
     </div>
-    <el-dialog width="55%" :visible.sync="isShow">
+    <el-dialog width="100%" :visible.sync="isShow">
       <template>
         <div style="display: inline-block; width: 49%;">
           <span class="demonstration"><!--正面图片--></span>
@@ -114,6 +114,7 @@
     updateSingleQuestion,
     updateIsDone
   } from '@/api/scoreAnalysis/testOfClasses'
+  import {Recongnition, RecognitionSheet, getCanvasPoints} from '@/api/scan/scanNew'
   import ElOption from "../../../node_modules/element-ui/packages/select/src/option";
   import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox";
   import ElSelectDropdown from "../../../node_modules/element-ui/packages/select/src/select-dropdown";
@@ -622,15 +623,15 @@
           let currentWidth = (data.points[i].br_x - data.points[i].tl_x) * ratio
           let currentHeight = (data.points[i].br_y - data.points[i].tl_y) * ratio
           if (data.points[i].filled == 1 && (data.points[i].sheetNum == num || data.points[i].sheetNum==num.toString())) {
-            this.drawAnswer(currentCtx, x - 1, y - 1, currentWidth + 2, currentHeight + 2, 2)
+            this.drawAnswer(data.points[i].color, currentCtx, x - 1, y - 1, currentWidth + 2, currentHeight + 2, 2)
           }
         }
       },
-      drawAnswer(currentCtx, x, y, width, height, linewidth){
+      drawAnswer(color, currentCtx, x, y, width, height, linewidth){
         currentCtx.beginPath();
-        currentCtx.fillStyle = 'red'
+        currentCtx.fillStyle = color
         currentCtx.lineWidth = linewidth
-        currentCtx.strokeStyle = 'red'
+        currentCtx.strokeStyle = color
         currentCtx.rect(x, y, width, height)
         currentCtx.stroke();
       },

@@ -9,17 +9,6 @@
         <el-button size="mini" type="primary" @click.native="handleModifyScore()"
         >批量修改分值
         </el-button>
-        <el-button size="mini" type="success" @click.native="handleChooseKnowledge()"
-        >选择细目表
-        </el-button>
-        <!--<el-select v-model="breakdownID_1" @change="handleKnowledgeChange" placeholder="请选择细目表">-->
-            <!--<el-option-->
-                <!--v-for="item in options_1"-->
-                <!--:key="item.id"-->
-                <!--:label="item.name"-->
-                <!--:value="item.id">-->
-            <!--</el-option>-->
-        <!--</el-select>-->
         <el-table
             :data="data"
             :row-style="showTr">
@@ -186,31 +175,14 @@
                 <el-button @click="modifyScore=false">取 消</el-button>
                 <el-button type="primary" @click.native="toModifyScore">确 定</el-button>
             </div>
-        </el-dialog>
-        <el-dialog title="选择细目表" :visible.sync="isKnowledge" width="80%">
-            <div>
-                <el-table :data="tableData" :border=true stripe style="width:100%; margin: auto" highlight-current-row>
-                    <el-table-column align="center" min-width="45%" prop="name" label="名称"></el-table-column>
-                    <el-table-column align="center" min-width="30%" prop="createUserName" label="创建人"></el-table-column>
-                    <el-table-column align="center" min-width="45%" prop="testName" label="上次考试名称"></el-table-column>
-                    <el-table-column align="center" min-width="30%" prop="templateName" label="细目表模板"></el-table-column>
-                    <el-table-column align="center" min-width="50%" prop="createTime" :formatter="dateFormat"
-                                     label="创建时间"></el-table-column>
-                    <el-table-column align="center" min-width="50%">
-                        <template slot-scope="scope">
-                            <el-button size="mini" type="primary" @click.native="handleKnowledgeChange(scope.row)">选择
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
+
         </el-dialog>
     </div>
 </template>
 <script>
     import Utils from '@/utils/tree/index'
-    import {getKnowledge, getTree, updateExam} from '@/api/exam/updateExam' //srcheke
-    import {getList,getKnowledgeBreakdown} from '@/api/exam/breakdown'
+    import {getQuestionAndKnowledge,updateBreakdown, createExam} from '@/api/exam/breakdown'
+    import {getKnowledge, updateExam} from '@/api/exam/updateExam' //srcheke
     import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox";
     import ElInput from "../../../node_modules/element-ui/packages/input/src/input";
     //  import Vue from 'vue'
@@ -267,7 +239,6 @@
         data() {
             return {
                 options5: [],//srcheke
-                tableData: [],
                 columns: [
                     {
                         text: '题目',
@@ -280,7 +251,6 @@
                 ],
                 numberType: '按学号', /*识别类型*/
                 isEdit: false,
-                isKnowledge: false,
                 modifyScore: false,
                 modifyScoreParam: {
                     start: 1,
@@ -307,16 +277,9 @@
                     label: 'menuName'
                 },
                 listQuery: {
-                    testID: 0
+                    id: 0,
+                    templateID: 0,
                 },
-                listQuery1: {
-                    isAll: false,
-                    pageNum: 1,
-                    pageSize: 20
-                },
-                breakdownID_1: '',
-                options_1: [],
-
                 editParams: {
                     id: 0,
                     testID: 0,
@@ -364,8 +327,9 @@
         }
         ,
         created() {
-            this.listQuery.testID = this.$route.query.testID
-            this.editParams.testID = this.$route.query.testID
+            this.listQuery.id = this.$route.query.breakdownID;
+            this.listQuery.templateID = this.$route.query.id;
+            this.editParams.id = this.$route.query.id;
             this.editParams.schoolID = this.$route.query.schoolID
             this.editParams.gradeID = this.$route.query.gradeID
             this.editParams.subjectID = this.$route.query.subjectID
@@ -395,14 +359,14 @@
                 getKnowledge(this.editParams).then(response => {
                     this.options5 = response.data;
                 });//srcheke
-                getTree(this.listQuery).then(response => {
+                /*getTree(this.listQuery).then(response => {
                     //this.dataSource = response.data
-                    /*  let array = new Array();
+                    /!*  let array = new Array();
                      for (let i = 0; i < response.data.length; i++) {
                      array.push(response.data[i].xmlQuestionSet)
-                     }*/
+                     }*!/
                     var date = new Date();
-                    this.dataSource = response.data.xmlQuestionSetList;
+                    this.dataSource = response.data;
                     if (response.data.name !== '') {
                         this.editParams.examName = response.data.name;
                     } else {
@@ -416,11 +380,12 @@
                         }
                     }
                     console.log(this.dataSource)
-                });
-                getList(this.listQuery1).then(response => {
-                    // this.options_1 = response.data.list;
-                    this.tableData = response.data.list;
-                    console.log(this.options_1)
+                })*/
+                getQuestionAndKnowledge(this.listQuery).then(response => {
+                    this.dataSource = response.data;
+                    var date = new Date();
+                    this.editParams.examName = this.$route.query.name + (date.getMonth() + 1) + "月" + date.getDate() + "日考试";
+                    console.log(this.dataSource)
                 })
             },
             /* // 显示行
@@ -545,9 +510,9 @@
                 this.editParams.xmlQuestionSets = resultTrans;
                 this.editParams.fullScore = this.totalScore;
                 console.log(this.editParams.xmlQuestionSets);
-                updateExam(this.editParams).then(response => {
+                createExam(this.editParams).then(response => {
                     this.$message({
-                        message: '考试修改成功',
+                        message: '考试创建成功',
                         type: "success",
                         duration: 600
                     });
@@ -566,33 +531,6 @@
             },
             handleModifyScore() {
                 this.modifyScore = true;
-            },
-            handleChooseKnowledge() {
-                this.isKnowledge = true;
-            },
-            handleKnowledgeChange(row) {
-                for (let i = 0; i < this.data.length; i++) {
-                    this.data[i].knowledges = [];
-                }
-                getKnowledgeBreakdown({id:row.id}).then(response => {
-                    console.log(response.data)
-                    var  knowledge = response.data;
-                    for (let i = 0; i < knowledge.length; i++) {
-                        console.log(knowledge[i].value)
-                        console.log(this.data[knowledge[i].value])
-                        this.data[knowledge[i].value].knowledges.push(knowledge[i].label)
-                        console.log(this.data[knowledge[i].value].label)
-                        if (this.data[knowledge[i].value].lable == '总分') {
-                            this.data[knowledge[i].value - 1].knowledges.push(knowledge[i].label)
-                        }
-                    }
-                    console.log(this.data)
-                })
-                this.isKnowledge = false;
-            },
-            dateFormat(row, column, cellValue, index) {
-                const daterc = row[column.property]
-                return daterc.substr(0, 10) + ' ' + daterc.substr(11, 8)
             }
         }
     }

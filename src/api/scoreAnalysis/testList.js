@@ -12,10 +12,34 @@ export function getList(query) {
     })
 }
 
+export function getVerticalList(query) {
+    return request({
+        url: '/vertical/list',
+        method: 'post',
+        data: QS.stringify(query)
+    })
+}
+
 export function getDif(query) {
     return request({
         url: 'test/analysis/questions/diffAndDif',
         method: 'post',
         data: QS.stringify(query)
+    })
+}
+
+export function updateSuggestion(query) {
+    return request({
+        url: 'question/test/update/suggestion',
+        method: 'post',
+        data: QS.stringify(query)
+    })
+}
+
+export function difChange(query) {
+    return request({
+        url: '/question/test/dif/change',
+        method: 'post',
+        data: query
     })
 }

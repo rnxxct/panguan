@@ -212,7 +212,7 @@
             message: '校对成功!',
             duration: 600
           })
-          this.$router.push("/scoreAnalysis/tests/")
+          this.$router.push("/scoreAnalysis/tests/choose")
         })
         /* this.$http.post('http://cnn.jouletek.com:8081/panguanb/verify/processing', {verifies: this.veri_list},
          {

@@ -1,10 +1,7 @@
 <template>
-    <div style="width: 80%; margin: 0 auto;height: 100%;">
+    <div style="width: 69%; margin: 0 auto;height: 100%;">
         <el-button type="primary" @click.native="handleAdd" icon="el-icon-plus" style="float: right">新建模板
         </el-button>
-        <el-input placeholder="请输入查询信息" style="float: left;width: 30%;" v-model="listQuery.keyword"
-                  clearable></el-input>
-        <el-button type="primary" style="float: left" @click.native="handleSearch">搜索</el-button>
         <el-table :data="tableData" :border=true stripe style="width:100%; margin: auto">
             <!--      <el-table-column align="center">
                     <template slot-scope="scope">
@@ -14,27 +11,20 @@
                       </el-radio>
                     </template>
                   </el-table-column>-->
-            <el-table-column align="left" prop="name" width="220%" label="模板名称"></el-table-column>
-            <el-table-column align="left" prop="schoolName" width="100%" label="学校"></el-table-column>
-            <el-table-column align="left" prop="gradeName" width="100%" label="年级"></el-table-column>
-            <el-table-column align="left" prop="subjectName" width="60%" label="学科"></el-table-column>
-            <el-table-column align="left" prop="createUserName" width="80%" label="创建人"></el-table-column>
-            <el-table-column align="left" prop="createTime" width="160%" label="创建时间"
-                             :formatter="dateFormat"></el-table-column>
+            <el-table-column align="left" prop="name" label="模板名称"></el-table-column>
+            <el-table-column align="left" prop="subjectName" label="学科"></el-table-column>
+            <el-table-column align="left" prop="createUserName" label="创建人"></el-table-column>
+            <el-table-column align="left" prop="createTime" label="创建时间" :formatter="dateFormat"></el-table-column>
             <el-table-column align="left" label="动作">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="info" @click.native="handleEdit(scope.$index,scope.row)"
-                               style="float: left;">
-                        编辑
-                    </el-button>
-                    <el-button size="mini" type="success" @click.native="handleDispatch(scope.$index,scope.row)"
-                               style="float: left;">
-                        分发
-                    </el-button>
-                    <el-button size="mini" type="danger" @click.native="handleDelete(scope.$index,scope.row)">删除
-                    </el-button>
+                    <!--<el-button size="mini" type="info" @click.native="handleEdit(scope.$index,scope.row)"-->
+                    <!--style="float: left;">-->
+                    <!--编辑-->
+                    <!--</el-button>-->
+                    <!--<el-button size="mini" type="danger" @click.native="handleDelete(scope.$index,scope.row)">删除-->
+                    <!--</el-button>-->
                     <el-button size="mini" type="primary" @click.native="handleCheck(scope.$index,scope.row)">
-                        查看
+                        选 择
                     </el-button>
                 </template>
             </el-table-column>
@@ -50,13 +40,6 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"/>
         </div>
-        <el-dialog title="模板删除" :visible.sync="isDelete" width="30%">
-            <span>确定删除</span>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="isDelete=false">取 消</el-button>
-                <el-button type="primary" @click="toDelete">确 定</el-button>
-            </div>
-        </el-dialog>
         <el-dialog width="55%" :visible.sync="isShow">
             <template>
                 <div style="display: inline-block; width: 49%;">
@@ -75,59 +58,14 @@
                         </el-carousel-item>
                     </el-carousel>
                 </div>
+                <el-button type="primary" @click="handleAdd()">确 定</el-button>
                 <el-button @click="isShow=false">取 消</el-button>
-            </template>
-        </el-dialog>
-        <el-dialog width="55%" :visible.sync="isDispatch">
-            <template>
-                <div>
-                    <el-form :model="addForm" inline="true">
-                        <el-form-item label="模板名称">
-                            <el-input autocomplete="off" v-model="addForm.name"></el-input>
-                        </el-form-item>
-                        <el-form-item label="学科">
-                            <el-select v-model="addForm.subjectID" placeholder="请选择">
-                                <el-option
-                                    v-for="item in subjects"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <div></div>
-                        <el-form-item label="学校名称">
-                            <el-select v-model="addForm.schoolID" filterable="true" placeholder="请选择">
-                                <el-option
-                                    v-for="item in schools"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="年级">
-                            <el-select v-model="addForm.gradeID" placeholder="请选择">
-                                <el-option
-                                    v-for="item in schools[i].grades"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-form>
-                    <el-button @click="isDispatch=false">取 消</el-button>
-                    <el-button type="primary" @click="toDispatch">确 定</el-button>
-                </div>
             </template>
         </el-dialog>
     </div>
 </template>
 <script>
-    import {getTemplateList, deleteTemplate, dispatchTemplate, getTemplateUrls} from '@/api/template/template.js'
-    import {getList as getSubject} from '@/api/subject/subject'
-    import {getSchoolGradeList as getSchoolList} from '@/api/school/school'
+    import {getTemplateList, deleteTemplate, getTemplateUrls} from '@/api/template/template.js'
     import ElRadio from "../../../node_modules/element-ui/packages/radio/src/radio";
 
     export default {
@@ -136,23 +74,10 @@
         },
         data() {
             return {
-                subjects: [],
-                schools: [],
-                grades: [],
-                i: 0,
-                addForm: {
-                    createUserID: 0,
-                    name: '',
-                    subjectID: '',
-                    schoolID: '',
-                    gradeID: 0,
-                    xmlContent: '',
-                    img: '',
-                    doc: '',
-                },
                 picSize: 2,//模板中试卷的页数
+                subjectID: '',
+                id: '',
                 isShow: false,
-                isDispatch: false,
                 screenWidth: 1920,
                 bannerHeight: 700,
                 imageList: [],
@@ -163,9 +88,9 @@
                 total: 0,
                 radio: 1,
                 listQuery: {
-                    keyword: '',
                     pageNum: 1,
                     pageSize: 10,
+                    keyword: ''
                 },
                 deleteForm: {
                     templateID: 0
@@ -192,49 +117,12 @@
                     this.tableData = response.data.templates;
                     this.total = response.data.total
                 })
-                getSubject().then(response => {
-                    this.subjects = response.data
-                })
-                getSchoolList().then(response => {
-                    this.schools = response.data
-                })
-            },
-            handleSearch() {
-                this.initTable();
             },
             handleAdd() {
-                this.$router.push({path: '/template/add'})
+                this.$router.push({path: '/exam/breakdown/choose', query: {subjectID: this.subjectID, id: this.id}})
             },
             handleEdit(index, row) {
                 this.$router.push('/template/update/' + row.id)
-            },
-            handleDispatch(index, row) {
-                this.addForm.subjectID = row.subjectID;
-                this.addForm.gradeID = row.gradeID;
-                this.addForm.schoolID = row.schoolID;
-                this.i = this.schools.indexOf(this.schools.filter(function (param) {
-                    return param.id == row.schoolID;
-                })[0]);
-                console.log(this.schools.filter(function (param) {
-                    return param.id == row.schoolID;
-                }));
-                this.addForm.name = row.name;
-                this.addForm.createUserID = row.createUserID;
-                this.addForm.img = row.img;
-                this.addForm.doc = row.doc;
-                this.addForm.xmlContent = row.xmlContent;
-                this.isDispatch = true;
-            },
-            toDispatch() {
-                dispatchTemplate(this.addForm).then(response => {
-                    this.$message({
-                        message: '分发成功',
-                        type: "success",
-                        duration: 600
-                    });
-                    this.isDispatch = false
-                    this.initTable();
-                })
             },
             handleDelete(index, row) {
                 this.isDelete = true
@@ -277,6 +165,8 @@
                 this.getIndex = row.index
             },
             handleCheck(index, row) {
+                this.subjectID = row.subjectID;
+                this.id = row.id;
                 getTemplateUrls({id: row.id}).then(response => {
                     this.imageList = response.data.imgURL
                     if (this.imageList.length == 1) {

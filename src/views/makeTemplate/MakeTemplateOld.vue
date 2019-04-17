@@ -1,87 +1,267 @@
 <template xmlns="http://www.w3.org/1999/html">
     <el-container>
+        <!--style="border: 0px solid #eee"-->
         <el-container style="height: 1000px;background: #000;">
             <el-main>
                 <div id="pdfDom">
                     <div class="page" id="page0" style="width: 592px; height: 832px;background-color: white;">
-                        <svg id="svg" width="592" height="832" style=" font-size: 10px; font-family: Calibri"></svg>
+                        <svg id="svg" width="592" height="832" style=" font-size: 10px"></svg>
                     </div>
                     <div class="page" id="page1"
                          style="width: 592px; height: 832px;background-color: white; display: none">
-                        <svg id="svg1" width="592" height="832" style=" font-size: 10px; font-family: Calibri"></svg>
+                        <svg id="svg1" width="592" height="832" style=" font-size: 10px"></svg>
                     </div>
                     <div class="page" id="page2"
                          style="width: 592px; height: 832px;background-color: white; display: none">
-                        <svg id="svg2" width="592" height="832" style=" font-size: 10px; font-family: Calibri"></svg>
+                        <svg id="svg2" width="592" height="832" style=" font-size: 10px"></svg>
                     </div>
                     <div class="page" id="page3"
                          style="width: 592px; height: 832px;background-color: white; display: none">
-                        <svg id="svg3" width="592" height="832" style=" font-size: 10px; font-family: Calibri"></svg>
+                        <svg id="svg3" width="592" height="832" style=" font-size: 10px"></svg>
                     </div>
                 </div>
+                <!--
+                        <div id="pdfDom" style="width:521px; margin: 0 auto">
+                          <div class="page"
+                               style="text-align: center; background-color: white; width: 521px; height: 736.842px;margin:0 auto;">
+                            <textarea class="headerTitle"
+                                      style="text-align: center; width: 480px; font-size: 23px; border-style: dashed; word-break: break-all; z-index: 2;">青岛新高三入学检测-语文 new2</textarea>
+                            <svg width="480" height="330.5" viewBox="0 0 960 661">
+                              <defs></defs>
+                              <text x="0" y="143" style="font-size: 33px; font-family: 文泉驿微米黑;">考号：</text>
+                              <line x1="78" x2="259" y1="149" y2="149" stroke="#000000" style=""></line>
+                              <text x="598" y="143" style="font-size: 33px; font-family: 文泉驿微米黑;">学校：</text>
+                              <line x1="677" x2="858" y1="149" y2="149" stroke="#000000" style=""></line>
+                              <text x="299" y="143" style="font-size: 33px; font-family: 文泉驿微米黑;">考场：</text>
+                              <line x1="377" x2="559" y1="149" y2="149" stroke="#000000" style=""></line>
+                              <rect x="0" y="173" width="507" height="78" stroke="#000000"
+                                    style="fill-opacity: 0;"></rect>
+                              <text x="163" y="228" style="font-size: 33px; font-family: 文泉驿微米黑;">注 意 事 项</text>
+                              <rect x="0" y="251" width="507" height="299" stroke="#000000"
+                                    style="fill-opacity: 0;"></rect>
+                              <text x="15" y="292" style="font-size: 25px; font-family: 文泉驿微米黑;"> 1.　答题前请将姓名、班级、考场、座
+                              </text>
+                              <text x="15" y="325" style="font-size: 25px; font-family: 文泉驿微米黑;">　　号和准考证号填写清楚。</text>
+                              <text x="15" y="357" style="font-size: 25px; font-family: 文泉驿微米黑;">
+                                2.　客观题答题,必须使用2B铅笔填涂,
+                              </text>
+                              <text x="15" y="390" style="font-size: 25px; font-family: 文泉驿微米黑;">　　修改时用橡皮擦干净。</text>
+                              <text x="15" y="422" style="font-size: 25px; font-family: 文泉驿微米黑;"> 3.　主观题必须使用黑色签字笔书写。
+                              </text>
+                              <text x="15" y="455" style="font-size: 25px; font-family: 文泉驿微米黑;">
+                                4.　必须在题号对应的答题区域内作答,
+                              </text>
+                              <text x="15" y="488" style="font-size: 25px; font-family: 文泉驿微米黑;">　　超出答题区域书写无效。</text>
+                              <text x="15" y="520" style="font-size: 25px; font-family: 文泉驿微米黑;"> 5.　保持答卷清洁完整。</text>
+                              <rect x="0" y="551" width="507" height="100" stroke="#000000"
+                                    style="fill-opacity: 0;"></rect>
+                              <text x="11" y="611" style="font-size: 33px; font-family: 文泉驿微米黑;">正确填涂</text>
+                              <rect x="177" y="590" width="31" height="19" stroke="#000000" fill="#000000"
+                                    style="fill-opacity: 1;"></rect>
+                              <text x="232" y="611" style="font-size: 33px; font-family: 文泉驿微米黑;">缺考标记</text>
+                              <rect x="397" y="590" width="31" height="19" stroke="#000000"
+                                    style="fill-opacity: 0;"></rect>
+                              <rect x="507" y="173" width="452" height="478" stroke="#000000"
+                                    style="fill-opacity: 0;"></rect>
+                              <rect x="507" y="173" width="452" height="78" stroke="#000000"
+                                    style="fill-opacity: 0;"></rect>
+                              <text x="643" y="228" style="font-size: 33px; font-family: 文泉驿微米黑;">准 考 证 号</text>
+                              <line x1="564" x2="564" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="621" x2="621" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="677" x2="677" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="734" x2="734" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="790" x2="790" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="847" x2="847" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="904" x2="904" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="960" x2="960" y1="251" y2="651" stroke="#000000" style=""></line>
+                              <line x1="507" x2="960" y1="320" y2="320" stroke="#000000" style=""></line>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="520" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="520" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="520" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="520" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="520" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="520" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="520" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="520" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="520" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="520" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="577" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="577" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="577" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="577" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="577" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="577" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="577" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="577" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="577" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="577" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="633" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="633" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="633" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="633" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="633" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="633" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="633" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="633" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="633" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="633" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="690" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="690" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="690" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="690" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="690" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="690" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="690" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="690" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="690" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="690" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="746" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="746" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="746" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="746" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="746" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="746" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="746" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="746" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="746" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="746" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="803" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="803" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="803" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="803" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="803" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="803" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="803" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="803" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="803" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="803" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="859" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="859" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="859" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="859" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="859" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="859" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="859" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="859" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="859" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="859" y="620" width="31" height="19"></image>
+                              <image xlink:href="/assets/b55ead0ec8ed2e1b7f31586a61136814.svg"
+                                     preserveAspectRatio="none" x="916" y="336" width="31" height="19"></image>
+                              <image xlink:href="/assets/66aeff1a048fbe394de77c7f0821759d.svg"
+                                     preserveAspectRatio="none" x="916" y="368" width="31" height="19"></image>
+                              <image xlink:href="/assets/cd7cfd8b08b3ec0d660b557b3c229284.svg"
+                                     preserveAspectRatio="none" x="916" y="399" width="31" height="19"></image>
+                              <image xlink:href="/assets/a4ace58c877e6dcb59db53f4ada7d8cb.svg"
+                                     preserveAspectRatio="none" x="916" y="431" width="31" height="19"></image>
+                              <image xlink:href="/assets/116a6c9b8edd52eaf956285417c521ca.svg"
+                                     preserveAspectRatio="none" x="916" y="462" width="31" height="19"></image>
+                              <image xlink:href="/assets/4f9b90ae7c3854ac1eed28af4821fc37.svg"
+                                     preserveAspectRatio="none" x="916" y="494" width="31" height="19"></image>
+                              <image xlink:href="/assets/fd504980ac795dd783c4975f3f70eed0.svg"
+                                     preserveAspectRatio="none" x="916" y="525" width="31" height="19"></image>
+                              <image xlink:href="/assets/880e1b5aa590ce7a4e9ffc480f891451.svg"
+                                     preserveAspectRatio="none" x="916" y="557" width="31" height="19"></image>
+                              <image xlink:href="/assets/20655727892566340688dac691b6b3ad.svg"
+                                     preserveAspectRatio="none" x="916" y="588" width="31" height="19"></image>
+                              <image xlink:href="/assets/2ad01a1916b7a3304e2c251746427821.svg"
+                                     preserveAspectRatio="none" x="916" y="620" width="31" height="19"></image>
+                            </svg>
+                          </div>
+                          <div style="margin: 0 auto">
+                            <svg width="480" height="98" viewBox="0 0 960 196">
+                              <defs></defs>
+                              <text x="429" y="68" style="font-size: 29px;">第 1-1 页</text>
+                            </svg>
+                          </div>
+                        </div>
+                -->
             </el-main>
         </el-container>
-        <el-aside width="40%" style="height: 90%;position: relative">
-            <!--<el-button icon="el-icon-circle-plus-outline" type="primary" @click="selection = true" @close="handleClose">-->
-                <!--选择题-->
-            <!--</el-button>-->
-            <!--<el-button icon="el-icon-circle-plus-outline" type="success" @close="handleClose">填空题</el-button>-->
-            <!--<el-button icon="el-icon-circle-plus-outline" type="info" @close="handleClose">主观题</el-button>-->
-            <el-upload
-                class="upload-demo"
-                drag
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :auto-upload="false"
-                :on-change="handleFileChange"   >
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将xml文件拖到此处，或<em>点击</em></div>
-                <div class="el-upload__tip" slot="tip">上传xml</div>
-            </el-upload>
-            <el-button style="margin-left: 10px;" size="small" @click="handleUseXML" type="success">使用xml文件</el-button>
+        <el-aside width="45%" style="height: 90%;position: relative">
+            <el-button icon="el-icon-circle-plus-outline" type="primary" @click="selection = true" @close="handleClose">
+                选择题
+            </el-button>
+            <el-button icon="el-icon-circle-plus-outline" type="success" @close="handleClose">填空题</el-button>
+            <el-button icon="el-icon-circle-plus-outline" type="info" @close="handleClose">主观题</el-button>
             <div class="step">
                 <div class="title">设置答题卡基础信息</div>
                 <br/>
                 <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item label="学科">
-                        <el-select v-model="addForm.subjectID" placeholder="请选择">
-                            <el-option
-                                v-for="item in subjects"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <div></div>
-                    <el-form-item label="学校名称">
-                        <el-select v-model="addForm.schoolID" placeholder="请选择">
-                            <el-option
-                                v-for="item in schools"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="年级">
-                        <el-select v-model="addForm.gradeID" placeholder="请选择">
-                            <el-option
-                                v-for="item in grades"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="模板名称">
-                        <el-input v-model="addForm.name" placeholder="请输入模板名称"
-                                  @change="handleChangeExamName"></el-input>
-                    </el-form-item>
                     <el-form-item label="考试名称">
                         <el-input v-model="param.examName" placeholder="请输入考试名称"
                                   @change="handleChangeExamName"></el-input>
                     </el-form-item>
-                    <el-form-item label="身份类型">
+                    <el-form-item label="">
                         <el-radio-group v-model="param.examType" @change="handleChangeNumberType">
                             <el-radio label="学号"></el-radio>
                             <el-radio label="考号"></el-radio>
@@ -152,12 +332,66 @@
                         </el-table>
                         <el-button size="mini" type="primary" @click="addSubjective = true">+主观题</el-button>
                     </el-collapse-item>
+                    <!--
+                              <el-collapse-item :title='item.title' v-for="(item,index) in questions" name="index" v-if="questions.length>0"
+                                                :key="index">
+                                <div v-if="item.type=='objective'">
+                                  <div v-for="(item,index) in objective" v-if="objective.length>0" style="margin-top: 3px">
+                                    <span>{{item.num}}</span>
+                                    <el-radio-group :key="item.num" style="text-align: left!important;">
+                                      <el-radio :label="option" v-for="(option,index) in item.options" :key="option"></el-radio>
+                                    </el-radio-group>
+                                    <el-button size="mini" @click="handleDeleteSingleObject(index)">删除</el-button>
+                                  </div>
+                                  <br/>
+                                  <el-button type="primary" size="mini" icon="plus" @click="handleObjectiveClick">+选择题</el-button>
+                                  <el-button type="danger" size="mini" @click="handleObjectDeleteAll" v-if="objective.length>0">-选择题
+                                  </el-button>
+                                </div>
+                                <div v-if="item.type == 'blanks'">
+                                  <el-table :data="blanks" :border=true stripe v-if="blanks.length>0">
+                                    <el-table-column align="left" prop="name" label="题号"></el-table-column>
+                                    <el-table-column align="left" prop="num" label="行数"></el-table-column>
+                                    <el-table-column align="left" prop="size" label="每行几个"></el-table-column>
+                                    <el-table-colmn align="left" prop="position" label="位置"></el-table-colmn>
+                                    <el-table-column align="left" min-width="100" prop="action" label="动作">
+                                      <template slot-scope="scope">
+                                        <el-button
+                                          size="mini"
+                                          type="primary" plain
+                                          @click="handleBlankDelete(scope.$index, scope.row)">删除
+                                        </el-button>
+                                      </template>
+                                    </el-table-column>
+                                  </el-table>
+                                </div>
+                                <div v-if="item.type=='subjective'">
+                                  <el-table :data="item.data" :border=true stripe v-if="item.data.length>0">
+                                    <el-table-column align="left" prop="name" label="题号"></el-table-column>
+                                    <el-table-column align="left" prop="size" label="行数"></el-table-column>
+                                    <el-table-column align="left" prop="fill" label="填充"></el-table-column>
+                                    <el-table-column align="left" prop="position" label="分数栏位置"></el-table-column>
+                                    <el-table-column align="left" prop="point" label="是否小数"></el-table-column>
+                                    <el-table-column align="left" min-width="100" prop="action" label="动作">
+                                      <template slot-scope="scope">
+                                        <el-button
+                                          size="mini"
+                                          type="primary" plain
+                                          @click="handleSubjectEdit(scope.$index, scope.row)">编辑
+                                        </el-button>
+                                      </template>
+                                    </el-table-column>
+                                  </el-table>
+                                  <el-button size="mini" type="primary" @click="addSubjective = true">+主观题</el-button>
+                                </div>
+                              </el-collapse-item>
+                    -->
                 </el-collapse>
             </div>
             <div style="position: absolute;bottom: 0px;left: 30%">
-                <el-button type="primary" @click="upload()">上传模板</el-button>
+                <el-button type="primary" @click="upload()">保存</el-button>
                 <el-button type="success" @click="getPdf(currentPage)">下载</el-button>
-                <!--<el-button type="info">预览</el-button>-->
+                <el-button type="info">预览</el-button>
             </div>
         </el-aside>
         <el-dialog title="添加选择大题" :visible.sync="selection" width="30%">
@@ -342,9 +576,6 @@
     import {templateAdd} from '@/api/template/template.js';
     import html2Canvas from 'html2canvas';
     import JsPDF from 'jspdf'
-    import {getList as getSubject} from '@/api/subject/subject'
-    import {getList as getSchoolList} from '@/api/school/school'
-    import {getGrade} from  '@/api/school/school'
 
     export default {
         components: {
@@ -363,7 +594,7 @@
             ElAside
         },
         created() {
-            this.init();
+
         },
         mounted() {
             this.initSvg();
@@ -381,9 +612,8 @@
         },
         data() {
             return {
-                contentXml: '',
-                widthOfPage: '592',
-                heightOfPage: '832',
+                widthOfPage: '520px',
+                heightOfPage: '735.42px',
                 baseWidth: 592 / 28, /*每页划分的基础宽度*/
                 baseHeight: 832 / 68, /*每页划分的基础高度*/
                 selection: false,
@@ -410,9 +640,16 @@
                 questions: [
                     {title: '选择题1', data: this.objective, type: 'objective'}
                 ],
-                objective: [], /*客观题*/
-                blanks: [],
-                subjective: [],
+                objective: [
+                    /* {num: 1, options: ['A', 'B', 'C', 'D']}*/
+                ], /*客观题*/
+                blanks: [
+                    /*{name: '选择题', size: '3', num: '4', position: 'right'}*/
+                ],
+                subjective: [
+                    /*{name: '13(总分12)', num: '1', fill: true, position: 'left', point: true, size: 3},
+                    {name: '14(总分12)', num: '1', fill: true, position: 'left', point: true, size: 3},*/
+                ],
                 param: {
                     examType: '',
                     examName: '',
@@ -423,6 +660,7 @@
                     num: '',
                     size: '',
                     start: '',
+                    // position: 'right'
                     stepScore: ''
                 },
                 addSubjectParam: {
@@ -472,31 +710,17 @@
                 multipleWidth: 1653 / 592,
                 multipleHeight: 2338 / 837,
                 addForm: {
-                    name: '',
-                    subjectID: '',
-                    schoolID: '',
-                    gradeID: '',
+                    name: 'cscscsxs',
+                    subjectID: '1',
+                    schoolID: '34',
+                    gradeID: '12',
                     xmlContent: '',
                     filesName: '',
                     urls: []
                 },
-                subjects: [],
-                schools: [],
-                grades: [],
             }
         },
         methods: {
-            init(){
-                getSubject().then(response => {
-                    this.subjects = response.data
-                })
-                getSchoolList().then(response => {
-                    this.schools = response.data
-                })
-                getGrade().then(response => {
-                    this.grades = response.data
-                })
-            },
             initSvg() {
                 this.xmldom = document.implementation.createDocument('', 'paper_template', null);
                 this.xmldom.documentElement.setAttribute('width', '1653');
@@ -512,7 +736,6 @@
                 let marker = this.xmldom.createElement('marker');
                 let marker1 = this.xmldom.createElement('marker');
                 let marker2 = this.xmldom.createElement('marker');
-                let marker3 = this.xmldom.createElement('marker');
 
                 student_ID.setAttribute('border_type', "solid_box");
                 student_ID.setAttribute("page_num", "1");
@@ -536,11 +759,11 @@
                 page_ID.setAttribute("page_num", "1");
                 page_ID.setAttribute("tl_x", Math.round(this.multipleWidth * (this.baseWidth * 14.5 - 1)).toString());
                 page_ID.setAttribute("tl_y", Math.round(this.multipleHeight * (790 + 1.5 * this.baseHeight - 11)).toString());
-                page_ID.setAttribute("br_x", Math.round(this.multipleWidth * (this.baseWidth * 14.5 + 6.5)).toString());
+                page_ID.setAttribute("br_x", Math.round(this.multipleWidth * (this.baseWidth * 14.5 + 5)).toString());
                 page_ID.setAttribute("br_y", Math.round(this.multipleHeight * (790 + 1.5 * this.baseHeight + 1)).toString());
                 this.baseWidth * 14.5, 790 + 1.5 * this.baseHeight,
 
-                markers.setAttribute('num', '4');
+                markers.setAttribute('num', '3');
                 marker.setAttribute('pos_type', 'top_left');
                 marker.setAttribute("tl_x", Math.round(this.multipleWidth * (this.baseWidth * 1.67)).toString());
                 marker.setAttribute("tl_y", Math.round(this.multipleHeight * (this.baseHeight * 4.2)).toString());
@@ -556,16 +779,15 @@
                 marker2.setAttribute("tl_y", Math.round(this.multipleHeight * (790 + 1.5 * this.baseHeight)).toString());
                 marker2.setAttribute("br_x", Math.round(this.multipleWidth * (this.baseWidth * 25.2)).toString());
                 marker2.setAttribute("br_y", Math.round(this.multipleHeight * (790 + 2 * this.baseHeight)).toString());
-                marker3.setAttribute('pos_type', 'top_right');
-                marker3.setAttribute("tl_x", Math.round(this.multipleWidth * (this.baseWidth * 24.5)).toString());
-                marker3.setAttribute("tl_y", Math.round(this.multipleHeight * (this.baseHeight * 4.2)).toString());
-                marker3.setAttribute("br_x", Math.round(this.multipleWidth * (this.baseWidth * 25.2)).toString());
-                marker3.setAttribute("br_y", Math.round(this.multipleHeight * (this.baseHeight * 4.7)).toString());
 
+                // var question_set = this.xmldom.createElement('question_set');
+                // // var text = this.xmldom.createTextNode('hello');
+                // // question_set.appendChild(text);
+                // question_set.setAttribute('name', '第一题'); // 可以像在html中一样为元素添加属性
+                // questions.appendChild(question_set);
                 markers.appendChild(marker);
                 markers.appendChild(marker1);
                 markers.appendChild(marker2);
-                markers.appendChild(marker3);
                 page.appendChild(markers);
                 page.appendChild(page_ID);
                 this.sheet.appendChild(page);
@@ -579,22 +801,18 @@
                 var svg1 = Snap('#svg1');
                 var svg2 = Snap('#svg2');
                 var svg3 = Snap('#svg3');
-                // svg.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
-                // svg1.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
-                // svg2.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
-                // svg3.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
+                svg.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
+                svg1.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
+                svg2.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
+                svg3.paper.image("../../static/images/Unknown.png", 515, 3.73 * this.baseHeight, 70, 70);
                 this.drawFilledRect(this.baseWidth * 1.67, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg);
                 this.drawFilledRect(this.baseWidth * 1.67, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg1);
                 this.drawFilledRect(this.baseWidth * 1.67, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg2);
                 this.drawFilledRect(this.baseWidth * 1.67, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg3);
-                this.drawFilledRect(this.baseWidth * 24.5, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg);
-                this.drawFilledRect(this.baseWidth * 24.5, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg1);
-                this.drawFilledRect(this.baseWidth * 24.5, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg2);
-                this.drawFilledRect(this.baseWidth * 24.5, this.baseHeight * 4.2, this.baseWidth * 0.7, this.baseHeight * 0.5, svg3);
                 svg.paper.text(this.baseWidth * 9.5, this.baseHeight * 3.8, "姓名");
                 svg2.paper.text(this.baseWidth * 9.5, this.baseHeight * 3.8, "姓名");
                 svg.paper.text(this.baseWidth * 3.8, this.baseHeight * 5.2, "第");
-                svg.paper.text(this.baseWidth * 4.6, this.baseHeight * 5.2, "1")
+                svg.paper.text(this.baseWidth * 4.6, this.baseHeight * 5.2, "1");
                 svg.paper.text(this.baseWidth * 5.2, this.baseHeight * 5.2, "页");
                 svg1.paper.text(this.baseWidth * 3.8, this.baseHeight * 5.2, "第");
                 svg1.paper.text(this.baseWidth * 4.6, this.baseHeight * 5.2, "2");
@@ -661,45 +879,17 @@
                 this.drawFilledRect(this.baseWidth * 1.67, 790 + 1.5 * this.baseHeight, this.baseWidth * 0.7, this.baseHeight * 0.5, svg3);
                 this.drawFilledRect(this.baseWidth * 24.5, 790 + 1.5 * this.baseHeight, this.baseWidth * 0.7, this.baseHeight * 0.5, svg3);
                 svg.paper.text(this.baseWidth * 14.5, 790 + 1.5 * this.baseHeight, "1").attr({
-                    fontSize: 13,
-                    stroke: '#000',
+                    fontSize: 13
                 });
                 svg1.paper.text(this.baseWidth * 14.5, 790 + 1.5 * this.baseHeight, "2").attr({
-                    fontSize: 13,
-                    stroke: '#000',
+                    fontSize: 13
                 });
                 svg2.paper.text(this.baseWidth * 14.5, 790 + 1.5 * this.baseHeight, "3").attr({
-                    fontSize: 13,
-                    stroke: '#000',
+                    fontSize: 13
                 });
                 svg3.paper.text(this.baseWidth * 14.5, 790 + 1.5 * this.baseHeight, "4").attr({
-                    fontSize: 13,
-                    stroke: '#000',
+                    fontSize: 13
                 });
-            },
-            handleFileChange(file, fileList) {
-                this.format(file,fileList);
-            },
-            handleUseXML() {
-                console.log(this.contentXml)
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(this.contentXml,"text/xml");
-                console.log(xmlDoc)
-
-            },
-            format(file,fileList){
-                var that = this;
-                console.log(file.raw)
-                if (file.raw) {
-                    let reader = new FileReader();//读取文件内容
-                    reader.readAsText(file.raw,'utf-8');
-                    reader.onload = function (e) {
-                        that.contentXml = e.target.result;  
-                    }
-                }
-            },
-            handlePreview(file) {
-                console.log(file);
             },
             handleChange() {
 
@@ -802,30 +992,30 @@
                 });
                 this.bottomPX = this.bottomPX + 14;
                 let top = this.bottomPX;
-                // if (this.rectObjective !== undefined) {
-                //     this.rectObjective.remove();
-                // }
+                if (this.rectObjective !== undefined) {
+                    this.rectObjective.remove();
+                }
                 if (this.objectEnd % 20 >= 5) {
                     this.rectObjective = svg.paper.rect(this.baseWidth * 1.67, this.bottomPX, 22.75 * this.baseWidth,
-                        (((Math.floor((this.objectEnd - 1) / 20)) + 1) * 5 + (Math.floor((this.objectEnd - 1) / 20)) + 1) * this.baseHeight).attr({
+                        ((Math.floor((this.objectEnd - 1) / 20)) * 5 + Math.floor(this.objectEnd / 20) * 2 + 6) * this.baseHeight).attr({
                         stroke: '#000',
                         style: 'fill-opacity :0'
                     });
-                    this.bottomPX = this.bottomPX + (((Math.floor((this.objectEnd - 1) / 20)) + 1) * 5 + (Math.floor((this.objectEnd - 1) / 20)) + 1) * this.baseHeight;
+                    this.bottomPX = this.bottomPX + ((Math.floor((this.objectEnd - 1) / 20)) * 5 + Math.floor(this.objectEnd / 20) * 2 + 6) * this.baseHeight;
                 } else if (this.objectEnd % 20 === 0) {
                     this.rectObjective = svg.paper.rect(this.baseWidth * 1.67, this.bottomPX, 22.75 * this.baseWidth,
-                        (((Math.floor((this.objectEnd - 1) / 20)) + 1) * 5 + (Math.floor((this.objectEnd - 1) / 20)) + 1) * this.baseHeight).attr({
+                        (((this.objectEnd) / 20) * 5 + this.objectEnd % 5 + 1 + (this.objectEnd / 20 * 2)) * this.baseHeight).attr({
                         stroke: '#000',
                         style: 'fill-opacity :0'
                     });
-                    this.bottomPX = this.bottomPX + (((Math.floor((this.objectEnd - 1) / 20)) + 1) * 5 + (Math.floor((this.objectEnd - 1) / 20)) + 1) * this.baseHeight;
+                    this.bottomPX = this.bottomPX + (((this.objectEnd) / 20) * 5 + this.objectEnd % 5 + 1 + (this.objectEnd / 20 * 2)) * this.baseHeight;
                 } else {
                     this.rectObjective = svg.paper.rect(this.baseWidth * 1.67, this.bottomPX, 22.75 * this.baseWidth,
-                        ((Math.floor((this.objectEnd - 1) / 20)) * 5 + this.objectEnd % 20 + (Math.floor((this.objectEnd - 1) / 20)) + 1) * this.baseHeight).attr({
+                        ((Math.floor((this.objectEnd - 1) / 20)) * 5 + this.objectEnd % 5 + 1 + Math.floor(this.objectEnd / 20) * 2) * this.baseHeight).attr({
                         stroke: '#000',
                         style: 'fill-opacity :0'
                     });
-                    this.bottomPX = this.bottomPX + ((Math.floor((this.objectEnd - 1) / 20)) * 5 + this.objectEnd % 20 + (Math.floor((this.objectEnd - 1) / 20)) + 1) * this.baseHeight;
+                    this.bottomPX = this.bottomPX + ((Math.floor((this.objectEnd - 1) / 20)) * 5 + this.objectEnd % 5 + 1 + Math.floor(this.objectEnd / 20) * 2) * this.baseHeight;
                 }
                 let option = this.defaultSelection.slice(0);
                 for (let j = 0; j < this.defaultSelection.length; j++) {
@@ -839,10 +1029,10 @@
                     question_set.appendChild(question);
                     this.qid++;
                     svg.paper.text(this.baseWidth * (3 + (Math.floor((i - 1) / 5) * 5) - (Math.floor((i - 1) / 20) * 20)),
-                        top + (this.baseHeight * ((i - 1) % 5 + 1)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)), i);
+                        top + (this.baseHeight * ((i - 1) % 5 + 2)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)), i);
                     for (let k = 0; k < this.defaultSelection.slice(0).length; k++) {
                         svg.paper.text(this.baseWidth * (4 + (Math.floor((i - 1) / 5) * 5) - (Math.floor((i - 1) / 20) * 20)) + 17 * k,
-                            top + (this.baseHeight * ((i - 1) % 5 + 1)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)),
+                            top + (this.baseHeight * ((i - 1) % 5 + 2)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)),
                             this.defaultSelection.slice(0)[k]).attr({
                             fontSize: 6
                         });
@@ -850,9 +1040,9 @@
                         options.setAttribute('option_name', option[k]);
                         options.setAttribute('filled', '0');
                         options.setAttribute('tl_x', Math.round(1653 / 592 * (this.baseWidth * (4 + (Math.floor((i - 1) / 5) * 5) - (Math.floor((i - 1) / 20) * 20)) + 17 * k)).toString());
-                        options.setAttribute('tl_y', Math.round(2338 / 837 * (top + (this.baseHeight * ((i - 1) % 5 + 1)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)) - 4)).toString());
+                        options.setAttribute('tl_y', Math.round(2338 / 837 * (top + (this.baseHeight * ((i - 1) % 5 + 2)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)) - 4)).toString());
                         options.setAttribute('br_x', Math.round(1653 / 592 * (this.baseWidth * (4 + (Math.floor((i - 1) / 5) * 5) - (Math.floor((i - 1) / 20) * 20)) + 17 * k + 10)).toString());
-                        options.setAttribute('br_y', Math.round(2338 / 837 * (top + (this.baseHeight * ((i - 1) % 5 + 1)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)) + 1)).toString());
+                        options.setAttribute('br_y', Math.round(2338 / 837 * (top + (this.baseHeight * ((i - 1) % 5 + 2)) + (Math.floor((i - 1) / 20) * (this.baseHeight * 6 + 2)) + 1)).toString());
                         question.appendChild(options);
                     }
                     this.objective.push({num: i, options: option})
@@ -909,8 +1099,6 @@
                         if (this.bottomPX + 10 + (this.addSubjectParam.size * this.baseHeight * 2.7) > 775) {
                             lastHeight = (this.addSubjectParam.size * this.baseHeight * 2.7) - (775 - this.bottomPX - 10);
                             let svgNext = Snap('#svg' + this.currentPage);
-                            svg.paper.text(this.baseWidth * 1.77, this.bottomPX + 20, this.addSubjectParam.name);
-                            svgNext.paper.text(this.baseWidth * 1.77, 140, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 1.67, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 (775 - this.bottomPX - 10)).attr({
                                 stroke: '#000',
@@ -1064,7 +1252,7 @@
                                 }))
                                 let questionStep = this.xmldom.createElement('question');
                                 questionStep.setAttribute('name', '步骤' + (preHeight + k + 1)); // 可以像在html中一样为元素添加属性
-                                questionStep.setAttribute('page_num', (this.currentPage+1).toString());
+                                questionStep.setAttribute('page_num', this.currentPage.toString());
                                 questionStep.setAttribute('full_score', '10');
                                 questionStep.setAttribute('type', 'subjective');
                                 questionStep.setAttribute('sub_type', 'subitem');
@@ -1083,7 +1271,6 @@
                             }
                             this.lineSubjectiveStepScore.push(this.lineSubjectiveStepLine);
                         } else {
-                            svg.paper.text(this.baseWidth * 1.77, this.bottomPX + 20, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 1.67, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 this.addSubjectParam.size * this.baseHeight * 2.7).attr({
                                 stroke: '#000',
@@ -1175,8 +1362,6 @@
                             }
                             let svgNext = Snap('#svg' + this.currentPage);
                             lastHeight = ((this.addSubjectParam.stepScoreNum * this.baseHeight * 2.7) + (2.7 * this.baseHeight)) - (775 - this.bottomPX - 10);
-                            svg.paper.text(this.baseWidth * 1.77, this.bottomPX + 20, this.addSubjectParam.name);
-                            svgNext.paper.text(this.baseWidth * 1.77, 140, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 1.67, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 775 - this.bottomPX - 10).attr({
                                 stroke: '#000',
@@ -1326,7 +1511,7 @@
                                 }))
                                 let questionStep = this.xmldom.createElement('question');
                                 questionStep.setAttribute('name', '步骤' + (preHeight + k + 1)); // 可以像在html中一样为元素添加属性
-                                questionStep.setAttribute('page_num', (this.currentPage+1).toString());
+                                questionStep.setAttribute('page_num', this.currentPage.toString());
                                 questionStep.setAttribute('full_score', '10');
                                 questionStep.setAttribute('type', 'subjective');
                                 questionStep.setAttribute('sub_type', 'subitem');
@@ -1345,7 +1530,6 @@
                             }
                             this.lineSubjectiveStepScore.push(this.lineSubjectiveStepLine);
                         } else {
-                            svg.paper.text(this.baseWidth * 1.77, this.bottomPX + 20, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 1.67, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 (this.addSubjectParam.stepScoreNum * this.baseHeight * 2.7) + (2.7 * this.baseHeight)).attr({
                                 stroke: '#000',
@@ -1586,7 +1770,7 @@
                                 }))
                                 let questionStep = this.xmldom.createElement('question');
                                 questionStep.setAttribute('name', '步骤' + (preHeight + k + 1)); // 可以像在html中一样为元素添加属性
-                                questionStep.setAttribute('page_num', (this.currentPage+1).toString());
+                                questionStep.setAttribute('page_num', this.currentPage.toString());
                                 questionStep.setAttribute('full_score', '10');
                                 questionStep.setAttribute('type', 'subjective');
                                 questionStep.setAttribute('sub_type', 'subitem');
@@ -1842,7 +2026,7 @@
                                 }))
                                 let questionStep = this.xmldom.createElement('question');
                                 questionStep.setAttribute('name', '步骤' + (preHeight + k + 1)); // 可以像在html中一样为元素添加属性
-                                questionStep.setAttribute('page_num', (this.currentPage+1).toString());
+                                questionStep.setAttribute('page_num', this.currentPage.toString());
                                 questionStep.setAttribute('full_score', '10');
                                 questionStep.setAttribute('type', 'subjective');
                                 questionStep.setAttribute('sub_type', 'subitem');
@@ -1947,8 +2131,6 @@
                         if (this.bottomPX + 10 + (this.addSubjectParam.size * this.baseHeight * 2.7) > 775) { //步骤少
                             lastHeight = (this.addSubjectParam.size * this.baseHeight * 2.7) - (775 - this.bottomPX - 10);
                             let svgNext = Snap('#svg' + this.currentPage);
-                            svg.paper.text(this.baseWidth * 4.65, this.bottomPX + 20, this.addSubjectParam.name);
-                            svgNext.paper.text(this.baseWidth * 4.65, 140, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 4.55, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 (775 - this.bottomPX - 10)).attr({
                                 stroke: '#000',
@@ -2102,7 +2284,7 @@
                                 }))
                                 let questionStep = this.xmldom.createElement('question');
                                 questionStep.setAttribute('name', '步骤' + (preHeight + k + 1)); // 可以像在html中一样为元素添加属性
-                                questionStep.setAttribute('page_num', (this.currentPage+1).toString());
+                                questionStep.setAttribute('page_num', this.currentPage.toString());
                                 questionStep.setAttribute('full_score', '10');
                                 questionStep.setAttribute('type', 'subjective');
                                 questionStep.setAttribute('sub_type', 'subitem');
@@ -2121,7 +2303,6 @@
                             }
                             this.lineSubjectiveStepScore.push(this.lineSubjectiveStepLine);
                         } else {
-                            svg.paper.text(this.baseWidth * 4.65, this.bottomPX + 20, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 4.55, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 this.addSubjectParam.size * this.baseHeight * 2.7).attr({
                                 stroke: '#000',
@@ -2210,8 +2391,6 @@
                                 preHeight = this.addSubjectParam.stepScoreNum;
                             }
                             lastHeight = ((this.addSubjectParam.stepScoreNum * this.baseHeight * 2.7) + (2.7 * this.baseHeight)) - (775 - this.bottomPX - 10);
-                            svg.paper.text(this.baseWidth * 4.65, this.bottomPX + 20, this.addSubjectParam.name);
-                            svgNext.paper.text(this.baseWidth * 4.65, 140, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 4.55, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 775 - this.bottomPX - 10).attr({
                                 stroke: '#000',
@@ -2361,7 +2540,7 @@
                                 }))
                                 let questionStep = this.xmldom.createElement('question');
                                 questionStep.setAttribute('name', '步骤' + (preHeight + k + 1)); // 可以像在html中一样为元素添加属性
-                                questionStep.setAttribute('page_num', (this.currentPage + 1).toString());
+                                questionStep.setAttribute('page_num', this.currentPage.toString());
                                 questionStep.setAttribute('full_score', '10');
                                 questionStep.setAttribute('type', 'subjective');
                                 questionStep.setAttribute('sub_type', 'subitem');
@@ -2380,7 +2559,6 @@
                             }
                             this.lineSubjectiveStepScore.push(this.lineSubjectiveStepLine);
                         } else {
-                            svg.paper.text(this.baseWidth * 4.65, this.bottomPX + 20, this.addSubjectParam.name);
                             this.rectSubjective.push(svg.paper.rect(this.baseWidth * 4.55, this.bottomPX + 10, 20.07 * this.baseWidth,
                                 (this.addSubjectParam.stepScoreNum * this.baseHeight * 2.7) + (2.7 * this.baseHeight)).attr({
                                 stroke: '#000',
@@ -2517,7 +2695,6 @@
                 var start = this.addBlanksParam.start;
                 let preHeight = Math.floor((775 - (this.bottomPX + 10)) / (2.7 * this.baseHeight));
                 console.log(preHeight)
-                svg.paper.text(4.66 * this.baseWidth, this.bottomPX + 20, this.addBlanksParam.name)
                 svg.paper.rect(1.67 * this.baseWidth, this.bottomPX + 10, 2.88 * this.baseWidth, 2.7 * this.baseHeight).attr({
                     stroke: '#000',
                     style: 'fill-opacity :0'
@@ -2620,6 +2797,24 @@
                     } else {
                         for (let n = 1; n <= preHeight; n++) {
                             for (let i = 0; i < this.addBlanksParam.size; i++) {
+                                // let questionStep = this.xmldom.createElement('question');
+                                // questionStep.setAttribute('name', start); // 可以像在html中一样为元素添加属性
+                                // questionStep.setAttribute('page_num', (this.currentPage+1).toString());
+                                // questionStep.setAttribute('full_score', '10');
+                                // questionStep.setAttribute('type', 'subjective');
+                                // questionStep.setAttribute('sub_type', 'subitem');
+                                // questionStep.setAttribute('qid', this.qid.toString());
+                                // this.qid++;
+                                // let score_section1 = this.xmldom.createElement('score_section');
+                                // score_section1.setAttribute('score_type', 'number'); // 可以像在html中一样为元素添加属性
+                                // score_section1.setAttribute('border_type', 'solid_box');
+                                // score_section1.setAttribute('digit_num', '2');
+                                // score_section1.setAttribute('tl_x', ((5.27 * this.baseWidth + i * (1.44 + perWidth) * this.baseWidth) * this.multipleWidth).toString());
+                                // score_section1.setAttribute('tl_y', ((this.bottomPX + 10 + (n - 1) * 2.7 * this.baseHeight) * this.multipleHeight).toString());
+                                // score_section1.setAttribute('br_x', ((6.71 * this.baseWidth + i * (1.44 + perWidth) * this.baseWidth) * this.multipleWidth).toString());
+                                // score_section1.setAttribute('br_y', ((this.bottomPX + 10 + n * 2.7 * this.baseHeight) * this.multipleHeight).toString());
+                                // questionStep.appendChild(score_section1);
+                                // question_set.appendChild(questionStep);
                                 svg.paper.line(5.81 * this.baseWidth + i * (1.44 + perWidth) * this.baseWidth, this.bottomPX + 10 + 2.7 * this.baseHeight * n, i * (1.44 + perWidth) * this.baseWidth + (5.81 + perWidth) * this.baseWidth, this.bottomPX + 10 + 2.7 * this.baseHeight * n).attr({
                                     stroke: '#000',
                                     strokeWidth: 1
@@ -2667,7 +2862,7 @@
                                 score_section1.setAttribute('tl_x', Math.round((5.27 * this.baseWidth + j * (2.88 + perWidth) * this.baseWidth) * this.multipleWidth).toString());
                                 score_section1.setAttribute('tl_y', Math.round((this.bottomPX + 10 + (k - 1) * 2.7 * this.baseHeight) * this.multipleHeight).toString());
                                 score_section1.setAttribute('br_x', Math.round((6.71 * this.baseWidth + j * (2.88 + perWidth) * this.baseWidth) * this.multipleWidth).toString());
-                                score_section1.setAttribute('br_y', Math.round((this.bottomPX + 10 + k * 2.7 * this.baseHeight) * this.multipleHeight).toString());
+                                score_section1.setAttribute('br_y', Math.round((this.bottomPX + 10 + k * this.baseHeight) * this.multipleHeight).toString());
                                 questionStep.appendChild(score_section1);
                                 question_set.appendChild(questionStep);
                                 svg.paper.line(7.43 * this.baseWidth + j * (2.88 + perWidth) * this.baseWidth, this.bottomPX + 10 + k * 2.7 * this.baseHeight, j * (2.88 + perWidth) * this.baseWidth + (7.43 + perWidth) * this.baseWidth, this.bottomPX + 10 + k * 2.7 * this.baseHeight).attr({
@@ -2829,51 +3024,6 @@
                 })
             },
             upload() {
-                console.log(this.xmldom.getElementsByTagName("sheet"))
-                console.log(this.xmldom.getElementsByTagName("page"))
-                if (this.currentPage == 2 && this.xmldom.getElementsByTagName("page").length == 1) {
-                    var charu = this.xmldom.getElementsByTagName("page")[0];
-                    var newNode=charu.cloneNode(true);
-                    newNode.getElementsByTagName("page_ID")[0].setAttribute("page_num","2");
-                    this.xmldom.getElementsByTagName("sheet")[0].appendChild(newNode);
-                } else if (this.currentPage == 3 && this.xmldom.getElementsByTagName("sheet").length == 1) {
-                    console.log(this.xmldom.getElementsByTagName("sheet"))
-                    console.log(this.xmldom.getElementsByTagName("page"))
-                    if (this.xmldom.getElementsByTagName("page").length == 1) {
-                        var charu = this.xmldom.getElementsByTagName("page")[0];
-                        var newNode=charu.cloneNode(true);
-                        newNode.getElementsByTagName("page_ID")[0].setAttribute("page_num","2");
-                        this.xmldom.getElementsByTagName("sheet")[0].appendChild(newNode);
-                    }
-
-                    var charu1 = this.xmldom.getElementsByTagName("sheet")[0];
-                    var newNode1 = charu1.cloneNode(true);
-                    newNode1.setAttribute("sheet_num","2");
-                    newNode1.removeChild(newNode1.getElementsByTagName("page")[1])
-                    newNode1.getElementsByTagName("page_ID")[0].setAttribute("page_num","3");
-                    newNode1.getElementsByTagName("student_ID")[0].setAttribute("page_num","3");
-                    newNode1.getElementsByTagName("student_ID")[1].setAttribute("page_num","3");
-                    this.xmldom.getElementsByTagName("paper_template")[0].appendChild(newNode1);
-                } else if (this.currentPage == 4) {
-                    if (this.xmldom.getElementsByTagName("sheet").length == 1 && this.xmldom.getElementsByTagName("page").length == 1) {
-                        var charu = this.xmldom.getElementsByTagName("page")[0];
-                        var newNode=charu.cloneNode(true);
-                        newNode.getElementsByTagName("page_ID")[0].setAttribute("page_num","2");
-                        this.xmldom.getElementsByTagName("sheet")[0].appendChild(newNode);
-                    } else if (this.xmldom.getElementsByTagName("sheet").length == 2){
-                        this.xmldom.getElementsByTagName("paper_template")[0].removeChild(this.xmldom.getElementsByTagName("sheet")[1])
-                    }
-
-                    var charu2 = this.xmldom.getElementsByTagName("sheet")[0];
-                    var newNode2=charu2.cloneNode(true);
-                    newNode2.setAttribute("sheet_num","2");
-                    newNode2.getElementsByTagName("page_ID")[0].setAttribute("page_num","3");
-                    newNode2.getElementsByTagName("page_ID")[1].setAttribute("page_num","4");
-                    newNode2.getElementsByTagName("student_ID")[0].setAttribute("page_num","3");
-                    newNode2.getElementsByTagName("student_ID")[1].setAttribute("page_num","3");
-                    this.xmldom.getElementsByTagName("paper_template")[0].appendChild(newNode2);
-                }
-                console.log(this.xmldom)
                 let x = this.currentPage;
                 var uploadNum = 0;
                 var that = this;
@@ -2882,6 +3032,50 @@
                 that.addForm.xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' + xml;
                 for (let i = 0; i < this.currentPage; i++) {
                     let page = '#page' + i;
+                    // html2Canvas(document.querySelector(page), {
+                    //   width: 592,
+                    //   height: 837,
+                    //   allowTaint: true,
+                    //   scale: 10
+                    // }).then(function (canvas) {
+                    //     let pageData = canvas.toDataURL('image/jpeg', 1.0);
+                    //     function dataURLtoBlob(dataurl) {
+                    //       var arr = dataurl.split(','),
+                    //         mime = arr[0].match(/:(.*?);/)[1],
+                    //         bstr = atob(arr[1]),
+                    //         n = bstr.length,
+                    //         u8arr = new Uint8Array(n);
+                    //       while (n--) {
+                    //         u8arr[n] = bstr.charCodeAt(n);
+                    //       }
+                    //       return new Blob([u8arr], {type: mime});
+                    //     }
+                    //
+                    //     const vthis = this;
+                    //     var client = new OSS({
+                    //       region: "oss-cn-zhangjiakou.aliyuncs.com",
+                    //       endpoint: 'oss-cn-zhangjiakou.aliyuncs.com',
+                    //       accessKeyId: "LTAIBQQtw9GvFpht",
+                    //       accessKeySecret: "bUyrKLwBWsLv3SkUYMj4OcNoC3WtZq",
+                    //       bucket: "panguan-standard"
+                    //     });
+                    //     console.log(that+'212121')
+                    //     client.put("/template/cscscsxs" + i + ".jpg", dataURLtoBlob(pageData), {
+                    //       progress: function* (percentage, cpt) {
+                    //         vthis.percentage = percentage
+                    //       }
+                    //     }).then((results) => {
+                    //       uploadNum++;
+                    //       that.addForm.urls.push(results.url);
+                    //       console.log(that.addForm.urls);
+                    //       if (uploadNum > x) {
+                    //         that.addForm.urls=that.addForm.urls.toString()
+                    //         that.requestUrl()
+                    //       }
+                    //     }).catch((err) => {
+                    //     });
+                    //   }
+                    // );
                     html2Canvas(document.querySelector(page), {
                         width: 592,
                         height: 837,
@@ -2911,7 +3105,7 @@
                                 bucket: "panguan-standard"
                             });
                             console.log(that + '212121')
-                            client.put("/template/"+ that.addForm.name + i + ".jpg", dataURLtoBlob(pageData), {
+                            client.put("/template/kkkkkkkkkk" + i + ".jpg", dataURLtoBlob(pageData), {
                                 progress: function* (percentage, cpt) {
                                     vthis.percentage = percentage
                                 }
@@ -2964,7 +3158,7 @@
                             accessKeySecret: "bUyrKLwBWsLv3SkUYMj4OcNoC3WtZq",
                             bucket: "panguan-standard"
                         });
-                        client.put("/template/" + that.addForm.name + ".pdf", PDF.output("blob"), {
+                        client.put("/template/kkkkkkkkkk.pdf", PDF.output("blob"), {
                             progress: function* (percentage, cpt) {
                                 vthis.percentage = percentage
                             }

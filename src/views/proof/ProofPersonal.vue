@@ -212,6 +212,7 @@
           this.imgsList = response.data.verifySheet.imgs
           this.proofParams.studentName = response.data.verifySheet.studentName
           this.proofParams.studentNumber = response.data.verifySheet.studentNumber
+            this.proofParams.sheetNum = response.data.verifySheet.sheetNum
         })
       },
       // 显示行
@@ -302,7 +303,7 @@
       },
       handleRotate(){
         //this.imgStyle=""
-        document.getElementById("imgRotate"+this.currentPicIndex).style.transform = 'rotate(' + (180 * this.rotateIndex) + 'deg)';
+        document.getElementById("imgRotate"+this.currentPicIndex).style.transform = 'rotate(' + (90 * this.rotateIndex) + 'deg)';
         this.rotateIndex++
       },
       handlePre(){

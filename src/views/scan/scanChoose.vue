@@ -40,6 +40,7 @@
                 <div v-for="(item,index) in list.students"
                      style="border-radius: 8px;border: 2px solid rgb(96,96,96); margin-bottom: 50px;background: #eef0f4">
                     <h3 style="">{{item.classNumber}}班 未阅学生名单 ({{item.students.length}})</h3>
+                    <el-button v-if="flag" size="mini" type="warning" @click="handleClear(item.classID)">清空班级数据</el-button>
                     <div>
           <span style="padding: 5px 5px 10px 5px;display:inline-block;"
                 v-for="student in item.students">{{student}}</span>
@@ -151,6 +152,17 @@
                 <el-button type="primary" @click="toRecognition">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="清空扫描数据" :visible.sync="isClear" width="20%">
+            <el-form :inline="true" algin="left">
+                <el-form-item label="请输入密码">
+                    <el-input autocomplete="off" type="password" v-model="password"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="isClear=false">取 消</el-button>
+                <el-button type="primary"  @click.native="cleanData">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -167,7 +179,7 @@
         getSearchResults,
         getScanPaperType
     } from '@/api/scan/scanNew'
-    import {getList as getTableList} from '@/api/scan/scan'
+    import {getList as getTableList,emptyDataByClass} from '@/api/scan/scan'
     import ElOption from "../../../node_modules/element-ui/packages/select/src/option";
     import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox";
     import ElSelectDropdown from "../../../node_modules/element-ui/packages/select/src/select-dropdown";
@@ -232,6 +244,8 @@
         data() {
             return {
                 flag: false,
+                isClear: false,
+                classID: 0,
                 password: '',
                 currentData: {}, /*当前的图片的canvas内容*/
                 imgHeight: 0, /*图片的高度*/
@@ -297,9 +311,11 @@
                     if (isScanDone == 1) {
                         if (response.data.state == 1) {
                             clearInterval(this.timerContinue)
+                            clearInterval(this.countTimer)
                             this.scanState = '扫描' + Math.round(this.$refs.iframe.contentWindow.Twain_scanCounter / 2) + '张'
                                 + ',上传' + this.$refs.iframe.contentWindow.Twain_uploadCounter + '张' + "  阅卷完毕"
                             document.getElementById("timer-loader").style.display = 'none'
+                            document.getElementById("donotTouch").style.display = 'none'
                             sessionStorage.removeItem("isScanDone")
                         } else {
                             clearInterval(this.countTimer)
@@ -335,6 +351,24 @@
                     this.tableData = response.data.testedSheets;
                     this.total = response.data.total;
                     this.classes = response.data.classes;
+                })
+            },
+            handleClear(classID){
+                this.isClear=true
+                this.classID = classID
+            },
+            cleanData(){
+                if (this.password !== 'qingkong') {
+                    alert('密码错误')
+                    return;
+                }
+                this.isClear=false
+                emptyDataByClass({testID:this.listQuery.testID,classID:this.classID}).then(response=>{
+                    this.$message({
+                        type:'success',
+                        message:'成功清空',
+                        duration: 800
+                    })
                 })
             },
             count() {
@@ -403,6 +437,8 @@
             },
             //继续扫描的按钮
             handleScan() {
+                clearInterval(this.countTimer)
+                clearInterval(this.timerContinue)
                 clearInterval(this.timer)
                 var that = this
                 this.timerContinue = setInterval(function () {
@@ -591,15 +627,15 @@
                     let currentWidth = (data.points[i].br_x - data.points[i].tl_x) * ratio
                     let currentHeight = (data.points[i].br_y - data.points[i].tl_y) * ratio
                     if (data.points[i].filled == 1 && data.points[i].sheetNum == 1) {
-                        this.drawAnswer(x - 1, y - 1, currentWidth + 2, currentHeight + 2, 2)
+                        this.drawAnswer(data.points[i].color, x - 1, y - 1, currentWidth + 2, currentHeight + 2, 2)
                     }
                 }
             },
-            drawAnswer(x, y, width, height, linewidth) {
+            drawAnswer(color, x, y, width, height, linewidth) {
                 ctx.beginPath();
-                ctx.fillStyle = 'red'
+                ctx.fillStyle = color
                 ctx.lineWidth = linewidth
-                ctx.strokeStyle = 'red'
+                ctx.strokeStyle = color
                 ctx.rect(x, y, width, height)
                 ctx.stroke();
             },

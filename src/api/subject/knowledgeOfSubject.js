@@ -11,6 +11,13 @@ export  function getTreeOfSubject(query) {
     data: QS.stringify(query)
   })
 }
+export  function getTreeOfSubjectB(query) {
+    return request({
+        url:'/breakdown/knowledgepoint/tree',
+        method:'post',
+        data: QS.stringify(query)
+    })
+}
 export function addPoint(query) {
   return request({
     url:'/knowledgepoint/add',

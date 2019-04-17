@@ -56,6 +56,13 @@ import ProofTwice from "../views/proof/ProofTwice";
 import Download from "../views/Download";
 import subjectRanking from "../views/exam/subjectRanking";
 import DiffAndDif from "../views/scoreAnalysis/DiffAndDif";
+import BreakdownTable from "../views/exam/BreakdownTable";
+import BreakdownTemplate from "../views/exam/BreakdownTemplate";
+import BreakdownTableChoose from "../views/exam/BreakdownTableChoose";
+import BreakdownTableChooseEdit from "../views/exam/BreakdownTableChooseEdit";
+import BreakdownCreateExam from "../views/exam/BreakdownCreateExam";
+import Home from "../views/Home";
+import ScoreVerticalAnalysis from "../views/scoreAnalysis/ScoreVerticalAnalysis";
 
 Vue.use(Router)
 const routes = [
@@ -63,6 +70,11 @@ const routes = [
         path: '/',
         name: '登录',
         component: LoginNew
+    },
+    {
+        path: '/home',
+        name: '首页',
+        component: Home
     },
     {
         path: '/download',
@@ -175,7 +187,7 @@ const routes = [
                 name: "学生",
                 component: StudentOfSchool
             }, {
-                path: 'studentOfClass/:classID(\\d+)',
+                path: 'studentOfClass',
                 name: "班级学生",
                 component: StudentOfClass
             },
@@ -209,8 +221,11 @@ const routes = [
                 path: 'tests/Choose',
                 name: '选择报表类型',
                 component: ScoreAnalysisChoose
-            },
-            {
+            }, {
+                path: 'tests/vertical',
+                name: '选择报表类型',
+                component: ScoreVerticalAnalysis
+            }, {
                 path: 'tests/more',
                 name: '更多测试',
                 component: ScoreAnalysisOfTestMore
@@ -268,6 +283,31 @@ const routes = [
                 path: '',
                 name: '模板',
                 component: Exam
+            },
+            {
+                path: 'breakdown',
+                name: '细目表',
+                component: BreakdownTable
+            },
+            {
+                path: 'breakdown/template',
+                name: '细目表模板',
+                component: BreakdownTemplate
+            },
+            {
+                path: 'breakdown/choose',
+                name: '细目表选择',
+                component: BreakdownTableChoose
+            },
+            {
+                path: 'breakdown/edit',
+                name: '细目表修改',
+                component: BreakdownTableChooseEdit
+            },
+            {
+                path: 'breakdown/create/exam',
+                name: '细目表创建考试',
+                component: BreakdownCreateExam
             },
             {
                 path: 'list',

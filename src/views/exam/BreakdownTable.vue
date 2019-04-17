@@ -1,24 +1,23 @@
 <template>
     <div style="width: 69%; margin: 0 auto">
-        <el-button type="primary" @click.native="handleMore" icon="el-icon-plus" style="float: right">查看更多
+        <el-button type="primary" @click.native="handleMore" style="float: right">查看更多
+        </el-button>
+        <el-button type="success" @click.native="handleAdd" icon="el-icon-plus" style="float: right">新建细目表
         </el-button>
         <el-table :data="tableData" :border=true stripe style="width:100%; margin: auto" highlight-current-row>
-            <el-table-column align="center" min-width="25%" prop="name" label="考试名称"></el-table-column>
-            <el-table-column align="left" min-width="25%" prop="subjectName" label="学科"></el-table-column>
-            <el-table-column align="center" min-width="50%" prop="createUserName" label="创建人"></el-table-column>
+            <el-table-column align="center" min-width="45%" prop="name" label="名称"></el-table-column>
+            <el-table-column align="center" min-width="30%" prop="createUserName" label="创建人"></el-table-column>
             <el-table-column align="center" min-width="50%" prop="createTime" :formatter="dateFormat"
                              label="创建时间"></el-table-column>
-            <el-table-column align="center" min-width="50%" prop="scanTime" :formatter="dateFormat"
-                             label="扫描时间"></el-table-column>
             <el-table-column align="center" min-width="50%">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="primary" @click.native="handleProof(scope.$index,scope.row)">校对
+                    <el-button size="mini" type="primary" @click.native="handleEdit(scope.$index,scope.row)">编辑
                     </el-button>
-                    <el-button size="mini" v-if="flag" type="primary"
-                               @click.native="handleProofTwice(scope.$index,scope.row)">二次校对
+                    <el-button size="mini" type="primary"
+                               @click.native="handleDelete(scope.$index,scope.row)">删除
                     </el-button>
-                    <el-button size="mini" v-if="flag" type="primary"
-                               @click.native="handleJump(scope.$index,scope.row)">跳转
+                    <el-button size="mini" type="primary"
+                               @click.native="createExam(scope.$index,scope.row)">创建考试
                     </el-button>
                 </template>
             </el-table-column>
@@ -39,7 +38,7 @@
 <script>
 
     import {getType} from '@/api/proof/proof'
-    import {getList} from '@/api/scoreAnalysis/testList'
+    import {getList, deleteBreakdown} from '@/api/exam/breakdown'
     import ElSelectDropdown from "../../../node_modules/element-ui/packages/select/src/select-dropdown";
     import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item";
     import ElOption from "../../../node_modules/element-ui/packages/select/src/option";
@@ -59,17 +58,14 @@
                     pageNum: 1,
                     pageSize: 10,
                 },
-                tableData: []
+                tableData: [],
+                param: {
+                    id: 0,
+                }
             }
         },
         created() {
             this.initTable();
-            console.log(sessionStorage.getItem('role'));
-            if (sessionStorage.getItem('role') === 'admin') {
-                this.flag = true
-            } else {
-                this.flag = false
-            }
         },
         methods: {
             initTable() {
@@ -86,30 +82,40 @@
                 this.listQuery.pageNum = val
                 this.initTable()
             },
+            handleAdd() {
+                this.$router.push({path:'/exam/breakdown/template'})
+            },
             handleMore() {
                 this.listQuery.isAll = true
                 this.initTable()
             },
-            handleProof(index, row) {
-                getType({testID: row.id}).then(response => {
-                    if (response.data == 2 || response.data == 3) {
-                        this.$router.push({path: "/proof/proofSheet/" + row.id})//在这里判断进行页面的跳转
-                    } else if (response.data == 1) {
-                        this.$router.push({path: "/proof/proof/" + row.id})//在这里判断进行页面的跳转
-                    } else {
-                        this.$message({
-                            type: 'warning',
-                            message: '本次考试无需校对',
-                            duration: 2000
-                        })
-                    }
+            handleEdit(index, row) {
+                this.$router.push({path: "/exam/breakdown/edit",query:{id:row.id,name:row.name,subjectID:row.subjectID,templateID:row.templateID}})//在这里判断进行页面的跳转
+            },
+            handleDelete(index, row) {
+                this.param.id = row.id;
+                deleteBreakdown(this.param).then(response => {
+                    this.initTable();
+                    this.$message({
+                        message: '删除成功',
+                        type: "success",
+                        duration: 600
+                    });
                 })
             },
-            handleProofTwice(index, row) {
-                this.$router.push({path: "/proof/proofTwice/" + row.id})//在这里判断进行页面的跳转
-            },
-            handleJump(index, row) {
-                this.$router.push({path:'/scan/scanChoose/',query:{testID:row.id,name:row.name}})
+            createExam(index, row){
+                this.isShow = false
+                this.$router.push({
+                    path: "/exam/breakdown/create/exam",
+                    query: {
+                        subjectID: row.subjectID,
+                        id: row.templateID,
+                        gradeID: row.gradeID,
+                        schoolID: row.schoolID,
+                        breakdownID: row.id,
+                        name: row.name,
+                    }
+                })
             },
             dateFormat(row, column, cellValue, index) {
                 const daterc = row[column.property]

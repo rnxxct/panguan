@@ -50,7 +50,7 @@ export default {
                 let page = '#page' + i;
                 console.log(page)
                 html2Canvas(document.querySelector(page), {
-                    width: 592,
+                    width: 591.8,
                     height: 837,
                     allowTaint: true,
                     scale: 10

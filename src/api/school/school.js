@@ -15,6 +15,12 @@ export function getGrade() {
     method:'get',
   })
 }
+export function getUserGrade() {
+    return request({
+        url:'/user/grade/list',
+        method:'get',
+    })
+}
 export function getSchoolGradeList() {
   return request({
     url:'/schoolgrade/list',

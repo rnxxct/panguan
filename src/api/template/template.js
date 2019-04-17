@@ -31,6 +31,13 @@ export function deleteTemplate(query) {
     data:QS.stringify(query)
   })
 }
+export function dispatchTemplate(query) {
+    return request({
+        url:'/template/dispatch',
+        method:'post',
+        data:QS.stringify(query)
+    })
+}
 export function getTemplateUrls(query) {
   return request({
     url:'/template/url/list',

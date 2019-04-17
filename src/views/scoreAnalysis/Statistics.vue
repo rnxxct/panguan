@@ -85,13 +85,13 @@
       -->
     </div>
     <div class="mod-layer-forgot" v-bind:style="{display:display}">
-      <el-button style="margin-top: 80px;margin-bottom:20px;color: black;font-weight: 700" @click="handleReturn">返回</el-button>
-      <div>
-        <img v-if="imgUrl.length==1" v-bind:src="imgUrl" width="50%" style="background: #000"/>
+      <div style="margin-top: 10px">
+        <img v-if="imgUrl.length==1" v-bind:src="imgUrl" width="90%" style="background: #000"/>
         <img v-if="imgUrl.length!==1" v-bind:src="imgUrl[0]" width="40%" style="background: #000"/>
         <br/>
         <img v-if="imgUrl.length!==1" v-bind:src="imgUrl[1]" width="40%" style="background: #000"/>
       </div>
+        <el-button style="margin-top: 15px;margin-bottom:20px;color: black;font-weight: 700" @click="handleReturn">返回</el-button>
     </div>
   </div>
 </template>
@@ -552,6 +552,14 @@
         }
       },
       handleExport(){
+          if (this.classes[this.currentClassIndex].value == 0) {
+              this.$message({
+                  message: '请指定班级',
+                  type: "success",
+                  duration: 600
+              })
+              return
+          }
         exportEXCEL({
           testID: this.listQuery.testID,
           classID: this.classes[this.currentClassIndex].value
@@ -663,7 +671,7 @@
   }
 
   .mod-layer-forgot {
-    height: 1000px;
+    height: 2000px;
     width: 100%;
     position: absolute;
     z-index: 1001;

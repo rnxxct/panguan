@@ -35,7 +35,7 @@
                     <div class="td" style="width: 8mm;height:10mm;border-right: 1px solid black;font-size: 3mm"
                          v-text="type"></div>
                     <div class="td" style="width: 8mm;height:10mm;border-right: 1px solid black;font-size: 3mm">总分</div>
-                    <div class="td" style="width: 5mm;height:10mm;border-right: 1px solid black;font-size: 3mm">名次</div>
+                    <div class="td"  v-if="flag" style="width: 5mm;height:10mm;border-right: 1px solid black;font-size: 3mm">名次</div>
                     <div class="td" style="width: 7mm;height:10mm;border-right: 0px solid black;font-size: 3mm">级次</div>
                 </div>
                 <div>
@@ -67,7 +67,7 @@
                         <div class="td" style="width: 8mm; border-right: 1px solid black;font-size: 3mm">
                             {{item.score}}
                         </div>
-                        <div class="td" style="width: 5mm; border-right: 1px solid black;font-size: 3mm">
+                        <div class="td" v-if="flag" style="width: 5mm; border-right: 1px solid black;font-size: 3mm">
                             {{item.classRank}}
                         </div>
                         <div class="td" style="width: 7mm; border-right: 0px solid black;;font-size: 3mm">
@@ -131,6 +131,7 @@
         },
         data() {
             return {
+                flag: true,
                 testName: '',
                 multiTestID: '',
                 classID: '',
@@ -164,6 +165,9 @@
                 this.$router.push({path: '/scoreAnalysis/tests/choose', query: {isGroup: 1}})
             },
             handleClassChange() {
+                if (this.checkedClass == 0 || this.checkedClass == -1 || this.checkedClass == -2) {
+                    this.flag = false;
+                }
                 getGradeList({multiTestID: this.multiTestID, classID: this.checkedClass}).then(response => {
                     this.subjects_1 = response.data.subjects
                     this.result = response.data.multiTestRanks

@@ -72,7 +72,7 @@
         this.initTable()
       },
       checkStudent(index,row){
-        this.$router.push('/teachingAffair/studentOfClass/'+row.id);
+        this.$router.push({path:'/teachingAffair/studentOfClass/',query:{schoolID: row.schoolID, gradeID: row.gradeID, id: row.id}});
       }
     }
   }
