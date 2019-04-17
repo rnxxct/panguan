@@ -227,6 +227,7 @@
             this.tempClass = this.$route.query.id.toString()
             /*
              this.editForm.classID =this.$route.params.classID
+             hh
              */
             this.initTable();
         },
