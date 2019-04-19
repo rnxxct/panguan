@@ -7,7 +7,7 @@
             <div style="position: absolute; left: 25%; top: 40%;">
                 <i @click="handleCreate" style="font-size: 125px" class="el-icon-document"></i>
                 <br/>
-                输答案
+                录答案
             </div>
             <div style="position: absolute; left: 45%; top: 40%;">
                 <i style="font-size: 125px" class="el-icon-printer" @click="handleScan"></i>

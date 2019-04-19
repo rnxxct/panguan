@@ -80,7 +80,7 @@
             <el-input style="width: 50px; display: inline-block" v-if="!scope.row._expanded && scope.row.type==='多项选择题'"
                       v-model="scope.row.partScore" type="text" size="mini">{{scope.row.partScore}}
             </el-input>-->
-            <el-input style="width: 50px; display: inline-block" v-if="!scope.row._expanded && scope.row.lable==='总分' || scope.row.type==='步骤分'"
+            <el-input style="width: 60px; display: inline-block" v-if="!scope.row._expanded && scope.row.lable==='总分' || scope.row.type==='步骤分'"
                       v-model="scope.row.fullScore" type="text" size="mini">{{scope.row.fullScore}}
             </el-input>
           </template>

@@ -71,7 +71,7 @@
           <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
         </span>
             <span v-else-if="1===0" class="ms-tree-space"></span>
-            <el-input style="width: 50px; display: inline-block" v-if="!scope.row._expanded && scope.row.lable==='总分' || scope.row.type==='步骤分'"
+            <el-input style="width: 60px; display: inline-block" v-if="!scope.row._expanded && scope.row.lable==='总分' || scope.row.type==='步骤分'"
                       v-model="scope.row.fullScore" type="text" size="mini">{{scope.row.fullScore}}
             </el-input>
           </template>

@@ -23,6 +23,11 @@
         </el-card>
       </el-col>
     </el-row>
+      <br>
+      <div v-if="id_list.length>0">
+          <el-button @click="tempConfirm" type="success">保存状态</el-button>
+      </div>
+      <br>
     <div v-if="id_list.length>0">
       <el-dialog :visible.sync="id_more_info" :width="dialog_width">
         <el-row v-for="(img, img_index) in id_list[id_modifying_item].imgs" :key="img_index">
@@ -141,7 +146,7 @@
 </template>
 
 <script>
-  import {getVeriListTwice, toConfirmTwice, getStudentNameByNumber} from '@/api/proof/proof'
+  import {getVeriListTwice, toConfirmTwice, toTempConfirm, getStudentNameByNumber} from '@/api/proof/proof'
   import ElForm from "../../../node_modules/element-ui/packages/form/src/form";
   import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item";
   import ElInput from "../../../node_modules/element-ui/packages/input/src/input";
@@ -214,14 +219,17 @@
           })
           this.$router.push("/scoreAnalysis/tests/choose")
         })
-        /* this.$http.post('http://cnn.jouletek.com:8081/panguanb/verify/processing', {verifies: this.veri_list},
-         {
-         headers: {
-         'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6ImEiLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE1NDI4N' +
-         'TAyMTAsInVzZXJuYW1lIjoiYWRtaW4ifQ.1Nx6VR-zyyenuYJ-WF-Y5a7vZybUiCVmBfXRC80BjYA'
-         }
-         })*/
       },
+        tempConfirm () {
+            toTempConfirm({verifies: this.veri_list}).then(response => {
+                this.$message({
+                    type: 'success',
+                    message: '校对成功!',
+                    duration: 600
+                })
+                this.getData();
+            })
+        },
       regroupData () {
         this.id_list = []
         this.score_list = []

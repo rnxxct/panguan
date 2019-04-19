@@ -28,6 +28,14 @@ export function toConfirm(query) {
   })
 }
 
+export function toTempConfirm(query) {
+    return request({
+        url:'/verify/temp/processing',
+        method:'post',
+        data: query
+    })
+}
+
 export function toConfirmTwice(query) {
   return request({
     url:'/verify/twice/processing',
